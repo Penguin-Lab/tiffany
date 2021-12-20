@@ -6,6 +6,25 @@ A estrutura física do robô é composta por seis patas de três eixos cada (tr�
 
 <img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/tiffany0.jpeg" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/tiffany1.jpeg" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/tiffany2.jpeg" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/tiffany3.jpeg" width="300">
 
+## Peças 3D em STL
+As peças em 3D desenvolvidas para este projeto foram baseadas no projeto do hexapod Steve da Eng. Eletricista Bruna Reis Lyra. Na pasta Pecas_3d, estão listadas essas peças em STL. Para ajudar, segue abaixo uma lista de todas as peças que devem ser impressas e qual o valor da sua maior dimensão (para ajudar na escolha da impressora):
+* Corpo
+  * 1x TIFFANY_BODY_DOWN.STL (230 mm)
+  * 1x TIFFANY_BODY_UP.STL (230 mm)
+* Patas
+  * 3x TIFFANY_TIBIA_RIGHT.STL (141 mm)
+  * 3x TIFFANY_TIBIA_RIGHT.STL espelhado (141 mm)
+  * 6x TIFFANY_OMBRO_UP.STL (61 mm)
+  * 3x TIFFANY_OMBRO_DOWN_RIGHT.STL (61 mm)
+  * 3x TIFFANY_OMBRO_DOWN_RIGHT.STL espelhado (61 mm)
+  * 6x TIFFANY_FEMUR_FRONT.STL (110 mm)
+  * 6x TIFFANY_FEMUR_BACK.STL (118 mm)
+* Motor
+  * 12x TIFFANY_TAMPA_MOTOR.STL (41 mm)
+
+Obs: a tampa de 12 motores deverão ser trocadas pelas peças TIFFANY_TAMPA_MOTOR.STL para que seja possível fixar os rolamentos nas patas. Serão utilizados 3 rolamentos por pata:
+<img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/pata0.jpeg" width="300">
+
 ## Placas de circuito impresso
 No projeto, será desenvolvida uma placa de circuito para servir como:
 * Shield para a ESP32 e sensores
