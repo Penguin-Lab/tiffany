@@ -23,6 +23,7 @@ As peças em 3D desenvolvidas para este projeto foram baseadas no projeto do hex
   * 12x TIFFANY_TAMPA_MOTOR.STL (41 mm)
 
 Obs: a tampa de 12 motores deverão ser trocadas pelas peças TIFFANY_TAMPA_MOTOR.STL para que seja possível fixar os rolamentos nas patas. Serão utilizados 3 rolamentos por pata:
+
 <img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/pata0.jpeg" width="300">
 
 ## Placas de circuito impresso
