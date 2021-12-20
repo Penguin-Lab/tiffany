@@ -26,6 +26,13 @@ Obs: a tampa de 12 motores deverão ser trocadas pelas peças TIFFANY_TAMPA_MOTO
 
 <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata0.png" width="300">
 
+## Outros itens da estrutura
+Alguns outros itens são necessários para finalizar a estrutura da Tiffany:
+* 6x Parafusos m4 ou similar de cm: prender as peças TIFFANY_BODY_UP.STL e TIFFANY_BODY_DOWN.STL
+* 24x Parafusos m4 de cm: prender as peças TIFFANY_OMBRO_DOWN_RIGHT.STL e TIFFANY_OMBRO_UP.STL
+* 24x Parafusos m3 de cm: prender as peças TIFFANY_TIBIA_RIGHT.STL nos motores
+* 6x Borrachas de lápis: colocar na ponta das peças TIFFANY_TIBIA_RIGHT.STL para evitar que o robô deslize
+
 ## Placas de circuito impresso
 No projeto, será desenvolvida uma placa de circuito para servir como:
 * Shield para a ESP32 e sensores
