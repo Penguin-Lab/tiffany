@@ -38,7 +38,7 @@ No projeto, será desenvolvida uma placa de circuito para servir como:
 * Shield para a ESP32 e sensores
 * Placa de alimentação dos motores
 
-<img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/shield_esp_cut.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/alimentacao.png" width="220">
+<img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/shield_esp_cut.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/alimentacao.png" width="220">
 
 ## Componentes eletrônicos
 Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
