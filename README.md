@@ -38,6 +38,8 @@ No projeto, será desenvolvida uma placa de circuito para servir como:
 * Shield para a ESP32 e sensores
 * Placa de alimentação dos motores
 
+<img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/shield_esp_cut.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/master/images/alimentacao.png" width="220">
+
 ## Componentes eletrônicos
 Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
 * Controlador com Wi-fi
@@ -49,4 +51,4 @@ Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
   * Bateria Zippy 1100mAh 2s 6,6v (motores)
 
 # Software
-Ainda em desenvolvimento.
+Na pasta de códigos, há o código de programação da ESP32 (38 pinos). Este é um exemplo em C++ de comando de movimentação da Tiffany. A ESP32 se comunica com o aplicativo Dabble no celular e recebe comandos de ação.
