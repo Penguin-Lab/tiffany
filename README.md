@@ -45,7 +45,8 @@ Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
 * Motores
   * 18x Servo TowerPro MG995 Metálico
 * Alimentação
-  * Por enquanto, via cabo
+  * Bateria de 9V (ESP32)
+  * Bateria Zippy 1100mAh 2s 6,6v (motores)
 
 # Software
 Ainda em desenvolvimento.
