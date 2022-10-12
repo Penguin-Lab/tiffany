@@ -34,7 +34,7 @@ Alguns outros itens são necessários para finalizar a estrutura da Tiffany:
 * 6x Borrachas de lápis: colocar na ponta das peças [TIFFANY_TIBIA_RIGHT.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TIBIA_RIGHT.STL) para evitar que o robô deslize
 
 ## Placas de circuito impresso
-No projeto, será desenvolvida uma placa de circuito para servir como:
+No projeto, foi desenvolvida uma placa de circuito para servir como:
 * Shield para a ESP32 e sensores
 * Placa de alimentação dos motores
 
