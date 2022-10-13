@@ -23,33 +23,33 @@ void IRAM_ATTR onTimer() { //Timer
    digitalWrite(hlp.tbrPin_,LOW);
   if(cont == 0) 
    digitalWrite(hlp.tmrPin_,HIGH);
-  else if(cont == hlp.tmr) 
+  else if(cont == (hlp.tmr-2)) 
    digitalWrite(hlp.tmrPin_,LOW);
   if(cont == 0) 
    digitalWrite(hlp.tfrPin_,HIGH);
-  else if(cont == hlp.tfr) 
+  else if(cont == (hlp.tfr-4)) 
    digitalWrite(hlp.tfrPin_,LOW);
   
   if(cont == 0) //tibias esquerda
    digitalWrite(hlp.tblPin_,HIGH);
-  else if(cont == (hlp.tbl-7)) 
+  else if(cont == (hlp.tbl-6)) 
    digitalWrite(hlp.tblPin_,LOW);
   if(cont == 0) 
    digitalWrite(hlp.tmlPin_,HIGH);
-  else if(cont == (hlp.tml-7)) 
+  else if(cont == (hlp.tml-5)) 
    digitalWrite(hlp.tmlPin_,LOW);
   if(cont == 0) 
    digitalWrite(hlp.tflPin_,HIGH);
-  else if(cont == (hlp.tfl-5)) 
+  else if(cont == (hlp.tfl-6)) 
    digitalWrite(hlp.tflPin_,LOW);
     
     if(cont == 0) //femures direita
       digitalWrite(hlp.fbrPin_,HIGH);
-    else if(cont == (hlp.fbr+4)) 
+    else if(cont == (hlp.fbr+5)) 
       digitalWrite(hlp.fbrPin_,LOW);
     if(cont == 0) 
       digitalWrite(hlp.fmrPin_,HIGH);
-    else if(cont == hlp.fmr) 
+    else if(cont == (hlp.fmr+2)) 
       digitalWrite(hlp.fmrPin_,LOW);
     if(cont == 0) 
       digitalWrite(hlp.ffrPin_,HIGH);
@@ -66,7 +66,7 @@ void IRAM_ATTR onTimer() { //Timer
       digitalWrite(hlp.fmlPin_,LOW);
     if(cont == 0) 
       digitalWrite(hlp.fflPin_,HIGH);
-    else if(cont == (hlp.ffl-6)) 
+    else if(cont == (hlp.ffl-5)) 
       digitalWrite(hlp.fflPin_,LOW);
 
        if(cont == 0) //ombro direita
