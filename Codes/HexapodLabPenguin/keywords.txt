@@ -1,0 +1,18 @@
+HexapodLabPenguin	KEYWORD1
+HLP KEYWORD1
+
+F_rlr_Up	KEYWORD2
+F_rlr_Down	KEYWORD2
+F_lrl_Up	KEYWORD2
+F_lrl_Down	KEYWORD2
+Capotar		KEYWORD2
+Iniciar		KEYWORD2
+SpeedMode	KEYWORD2
+Stop		KEYWORD2
+ReadyDance	KEYWORD2
+Dance		KEYWORD2
+StopDance	KEYWORD2
+WalkFrente	KEYWORD2
+MoonWalk	KEYWORD2
+TurnLeft	KEYWORD2
+TurnRight	KEYWORD2
