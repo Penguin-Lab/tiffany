@@ -315,6 +315,7 @@ void loop(){
 }
 
 bool select_apertado = 0;
+int angulo_joystick;
 void TaskTrajetoria(void *pvParameters) {
   int k = 0;
   for (;;) {
@@ -437,6 +438,36 @@ void TaskTrajetoria(void *pvParameters) {
         }
         vTaskDelay(pdMS_TO_TICKS(5));
     }
+    else if(bolha == 5){//ESQUERDA
+        float angulo = float(angulo_joystick)*M_PI/180.0;
+        EsqF.proximo_ponto_trajetoria(k, OFFSET_EF, -angulo);
+        DirM.proximo_ponto_trajetoria(k, OFFSET_DM, angulo);
+        EsqT.proximo_ponto_trajetoria(k, OFFSET_ET, -angulo);
+        DirF.proximo_ponto_trajetoria(k, OFFSET_DF, angulo);
+        EsqM.proximo_ponto_trajetoria(k, OFFSET_EM, -angulo);
+        DirT.proximo_ponto_trajetoria(k, OFFSET_DT, angulo);
+        // Serial.print(String(EsqF.angulin,4) + " , ");
+        // A partir dos x da trajetoria, atualiza os proxang
+        EsqF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        DirM.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        EsqT.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        DirF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        EsqM.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        DirT.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        EsqF.moverPerna();
+        DirM.moverPerna();
+        EsqT.moverPerna();
+        DirF.moverPerna();
+        EsqM.moverPerna();
+        DirT.moverPerna();
+        if (k == 0){
+          k = TOTAL_PONTOS - 1;
+        }
+        else{
+          k--;
+        }
+        vTaskDelay(pdMS_TO_TICKS(5));
+    }
     else{
       k = 0;
       EsqF.moverPosIni();
@@ -467,9 +498,15 @@ void TaskServos(void *pvParameters) {
     else if(GamePad.isLeftPressed()){
       bolha = 4;
     }
+    else if(GamePad.getRadius() > 2){
+      angulo_joystick = GamePad.getAngle();
+      bolha = 5;
+    }
     else{
       bolha = 0;
     }
+    
+
     if (GamePad.isTrianglePressed()){
       OFFSET_EF = 0;
       OFFSET_DT = METADE_PONTOS;
