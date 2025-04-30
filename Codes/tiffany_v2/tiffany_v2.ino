@@ -8,7 +8,6 @@
 #define TOTAL_PONTOS 66
 #define METADE_PONTOS TOTAL_PONTOS / 2
 
-
 int OFFSET_EF = 0;
 int OFFSET_DT = METADE_PONTOS;
 int OFFSET_EM = METADE_PONTOS;
@@ -48,6 +47,8 @@ struct Perna {
   float y;
   float z;
   float andada[3][TOTAL_PONTOS];
+  float andada_rodarAH[3][TOTAL_PONTOS];
+  float andada_rodarH[3][TOTAL_PONTOS];
   float angulin;
 
   Perna(Adafruit_PWMServoDriver* pwm, int pinOmbro, int pinFemur, int pinTibia, int angOmbroIni, int angFemurIni, int angTibiaIni, int OMIN, int OMAX, int FMIN, int FMAX, int TMIN, int TMAX) {
@@ -76,7 +77,7 @@ struct Perna {
     this->x = 0.0;
     this->y = 0.0;
     this->z = 0.0;
-    this->angulin = 0.0;
+    this->angulin = M_PI/6.0;
   }
   
   void iniciaPerna() {
@@ -103,16 +104,32 @@ struct Perna {
         this->andada[0][TOTAL_PONTOS-1-kt] = pow(u, 3) * P0[0] + 3 * pow(u, 2) * t * P1[0] + 3 * u * pow(t, 2) * P2[0] + pow(t, 3) * P3[0];
         this->andada[1][TOTAL_PONTOS-1-kt] = this->y_ini;
         this->andada[2][TOTAL_PONTOS-1-kt] = pow(u, 3) * P0[1] + 3 * pow(u, 2) * t * P1[1] + 3 * u * pow(t, 2) * P2[1] + pow(t, 3) * P3[1];
+
+        this->andada_rodarAH[0][TOTAL_PONTOS-1-kt] = this->x + cos(this->angulin)*(-this->x_ini + pow(u, 3) * P0[0] + 3 * pow(u, 2) * t * P1[0] + 3 * u * pow(t, 2) * P2[0] + pow(t, 3) * P3[0]);
+        this->andada_rodarAH[1][TOTAL_PONTOS-1-kt] = this->y_ini + sin(this->angulin)*(-this->x_ini + pow(u, 3) * P0[0] + 3 * pow(u, 2) * t * P1[0] + 3 * u * pow(t, 2) * P2[0] + pow(t, 3) * P3[0]);
+        this->andada_rodarAH[2][TOTAL_PONTOS-1-kt] = pow(u, 3) * P0[1] + 3 * pow(u, 2) * t * P1[1] + 3 * u * pow(t, 2) * P2[1] + pow(t, 3) * P3[1];
+
+        this->andada_rodarH[0][TOTAL_PONTOS-1-kt] = this->x + cos(-this->angulin)*(-this->x_ini + pow(u, 3) * P0[0] + 3 * pow(u, 2) * t * P1[0] + 3 * u * pow(t, 2) * P2[0] + pow(t, 3) * P3[0]);
+        this->andada_rodarH[1][TOTAL_PONTOS-1-kt] = this->y_ini + sin(-this->angulin)*(-this->x_ini + pow(u, 3) * P0[0] + 3 * pow(u, 2) * t * P1[0] + 3 * u * pow(t, 2) * P2[0] + pow(t, 3) * P3[0]);
+        this->andada_rodarH[2][TOTAL_PONTOS-1-kt] = pow(u, 3) * P0[1] + 3 * pow(u, 2) * t * P1[1] + 3 * u * pow(t, 2) * P2[1] + pow(t, 3) * P3[1];
       }
       else{
         this->andada[0][TOTAL_PONTOS-1-kt] = P3[0] + (P0[0] - P3[0])*(float(kt - METADE_PONTOS) / (METADE_PONTOS - 1));
         this->andada[1][TOTAL_PONTOS-1-kt] = this->y_ini;
         this->andada[2][TOTAL_PONTOS-1-kt] = this->z_ini;
+
+        this->andada_rodarAH[0][TOTAL_PONTOS-1-kt] = this->x_ini + cos(this->angulin)*(-this->x_ini + P3[0] + (P0[0] - P3[0])*(float(kt - METADE_PONTOS) / (METADE_PONTOS - 1)));
+        this->andada_rodarAH[1][TOTAL_PONTOS-1-kt] = this->y_ini + sin(this->angulin)*(-this->x_ini + P3[0] + (P0[0] - P3[0])*(float(kt - METADE_PONTOS) / (METADE_PONTOS - 1)));
+        this->andada_rodarAH[2][TOTAL_PONTOS-1-kt] = this->z_ini;
+        
+        this->andada_rodarH[0][TOTAL_PONTOS-1-kt] = this->x_ini + cos(-this->angulin)*(-this->x_ini + P3[0] + (P0[0] - P3[0])*(float(kt - METADE_PONTOS) / (METADE_PONTOS - 1)));
+        this->andada_rodarH[1][TOTAL_PONTOS-1-kt] = this->y_ini + sin(-this->angulin)*(-this->x_ini + P3[0] + (P0[0] - P3[0])*(float(kt - METADE_PONTOS) / (METADE_PONTOS - 1)));
+        this->andada_rodarH[2][TOTAL_PONTOS-1-kt] = this->z_ini;
       }
       // Serial.print(this->andada[0][kt],3);
       // Serial.print(", ");
     }
-    Serial.println("Vetor de trajetoria criado!");
+    Serial.println("Vetores de trajetoria criados!");
 
     this->angOmbro = this->proxangOmbro;
     int pulso = map(this->angOmbro, 0, 180, OMIN, OMAX);
@@ -191,6 +208,21 @@ struct Perna {
     this->x = this->andada[0][kn];
     this->y = this->andada[1][kn];
     this->z = this->andada[2][kn];
+  }
+
+  void proximo_ponto_trajetoria_rodar(int k, int offset, int sentido) {
+    int kn = (k + offset) % TOTAL_PONTOS;
+    // Atualiza posição
+    if(sentido==0){ //AH = 0 = GIRAR PRA ESQUERDA
+      this->x = this->andada_rodarAH[0][kn];
+      this->y = this->andada_rodarAH[1][kn];
+      this->z = this->andada_rodarAH[2][kn];
+    }
+    else{
+      this->x = this->andada_rodarH[0][kn];
+      this->y = this->andada_rodarH[1][kn];
+      this->z = this->andada_rodarH[2][kn];
+    }
   }
 
   void moverPosIni() {
@@ -347,6 +379,64 @@ void TaskTrajetoria(void *pvParameters) {
         }
         vTaskDelay(pdMS_TO_TICKS(10));
     }
+    else if(bolha == 3){//DIREITA
+        EsqF.proximo_ponto_trajetoria_rodar(k, OFFSET_EF, 0);
+        DirM.proximo_ponto_trajetoria_rodar(k, OFFSET_DM, 1);
+        EsqT.proximo_ponto_trajetoria_rodar(k, OFFSET_ET, 0);
+        DirF.proximo_ponto_trajetoria_rodar(k, OFFSET_DF, 1);
+        EsqM.proximo_ponto_trajetoria_rodar(k, OFFSET_EM, 0);
+        DirT.proximo_ponto_trajetoria_rodar(k, OFFSET_DT, 1);
+        // Serial.print(String(EsqF.angulin,4) + " , ");
+        // A partir dos x da trajetoria, atualiza os proxang
+        EsqF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        DirM.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        EsqT.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        DirF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        EsqM.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        DirT.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        EsqF.moverPerna();
+        DirM.moverPerna();
+        EsqT.moverPerna();
+        DirF.moverPerna();
+        EsqM.moverPerna();
+        DirT.moverPerna();
+        if (k == TOTAL_PONTOS - 1){
+          k = 0;
+        }
+        else{
+          k++;
+        }
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
+    else if(bolha == 4){//ESQUERDA
+        EsqF.proximo_ponto_trajetoria_rodar(k, OFFSET_EF, 1);
+        DirM.proximo_ponto_trajetoria_rodar(k, OFFSET_DM, 0);
+        EsqT.proximo_ponto_trajetoria_rodar(k, OFFSET_ET, 1);
+        DirF.proximo_ponto_trajetoria_rodar(k, OFFSET_DF, 0);
+        EsqM.proximo_ponto_trajetoria_rodar(k, OFFSET_EM, 1);
+        DirT.proximo_ponto_trajetoria_rodar(k, OFFSET_DT, 0);
+        // Serial.print(String(EsqF.angulin,4) + " , ");
+        // A partir dos x da trajetoria, atualiza os proxang
+        EsqF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        DirM.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        EsqT.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        DirF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        EsqM.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        DirT.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
+        EsqF.moverPerna();
+        DirM.moverPerna();
+        EsqT.moverPerna();
+        DirF.moverPerna();
+        EsqM.moverPerna();
+        DirT.moverPerna();
+        if (k == TOTAL_PONTOS - 1){
+          k = 0;
+        }
+        else{
+          k++;
+        }
+        vTaskDelay(pdMS_TO_TICKS(10));
+    }
     else{
       k = 0;
       EsqF.moverPosIni();
@@ -370,6 +460,12 @@ void TaskServos(void *pvParameters) {
     }
     else if(GamePad.isDownPressed()){
       bolha = 2;
+    }
+    else if(GamePad.isRightPressed()){
+      bolha = 3;
+    }
+    else if(GamePad.isLeftPressed()){
+      bolha = 4;
     }
     else{
       bolha = 0;
