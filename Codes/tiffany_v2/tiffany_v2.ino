@@ -54,8 +54,10 @@ struct Perna {
   float andada_rodarAH[3][TOTAL_PONTOS];
   float andada_rodarH[3][TOTAL_PONTOS];
   float angulin;
+  float Obodyx;
+  float Obodyy;
 
-  Perna(Adafruit_PWMServoDriver* pwm, int pinOmbro, int pinFemur, int pinTibia, int angOmbroIni, int angFemurIni, int angTibiaIni, int OMIN, int OMAX, int FMIN, int FMAX, int TMIN, int TMAX) {
+  Perna(Adafruit_PWMServoDriver* pwm, int pinOmbro, int pinFemur, int pinTibia, int angOmbroIni, int angFemurIni, int angTibiaIni, int OMIN, int OMAX, int FMIN, int FMAX, int TMIN, int TMAX, float Obodyx, float Obodyy) {
     this->pwm = pwm;
     this->pinOmbro = pinOmbro;
     this->pinFemur = pinFemur;
@@ -90,6 +92,8 @@ struct Perna {
     this->P3[0] = 0.0;
     this->P3[1] = 0.0;
     this->angulin = M_PI/6.0;
+    this->Obodyx = Obodyx;
+    this->Obodyy = Obodyy;
   }
   
   void iniciaPerna() {
@@ -199,6 +203,32 @@ struct Perna {
     }
   }
 
+  void proximo_ponto_trajetoria_rodar(int k, int offset, float angulo, float dy) {
+    int kn = (k + offset) % TOTAL_PONTOS;
+    float t;
+    float u;
+    float d_theta;
+    // Constantes
+    float theta_ini = atan2((this->x_ini+this->Obodyx), (this->y_ini+this->Obodyy+dy));
+    float r = sqrt(pow(this->x_ini+this->Obodyx, 2) + pow(this->y_ini+this->Obodyy+dy, 2));
+    // Atualiza posição
+    if (kn < METADE_PONTOS){
+      t = float(kn)/(METADE_PONTOS-1);
+      u = 1 - t;
+      d_theta = angulo*t;
+      this->x = r*sin(theta_ini + d_theta) - this->Obodyx;
+      this->y = r*cos(theta_ini + d_theta) - this->Obodyy - dy;
+      this->z = pow(u, 3) * this->P0[1] + 3 * pow(u, 2) * t * this->P1[1] + 3 * u * pow(t, 2) * this->P2[1] + pow(t, 3) * this->P3[1];
+    }
+    else{
+      t = float(kn - METADE_PONTOS) / (METADE_PONTOS - 1);
+      d_theta = angulo*t;
+      this->x = r*sin(theta_ini + d_theta) - this->Obodyx;
+      this->y = r*cos(theta_ini + d_theta) - this->Obodyy - dy;
+      this->z = this->z_ini;
+    }
+  }
+
   void proximo_ponto_trajetoria_antigo(int k, int offset) {
     int kn = (k + offset) % TOTAL_PONTOS;
     // Atualiza posição
@@ -252,13 +282,13 @@ struct Perna {
 
 int angulo = 0;
 
-Perna EsqF = {&pwm1, 12, 13, 14, 35, 26, -100, 142, 426, 258, 682, 158, -258}; // ou 145, 475 -> 140, 470
-Perna EsqM = {&pwm1, 4, 5, 6, 0, 26, -100, 218, 530, 296, 672, 154, -154};
-Perna EsqT = {&pwm1, 0, 1, 2, -35, 26, -100, 263, 603, 286, 702, 168, -260};
+Perna EsqF = {&pwm1, 12, 13, 14, 35, 26, -100, 142, 426, 258, 682, 158, -258, 94.38, 55.5}; // ou 145, 475 -> 140, 470
+Perna EsqM = {&pwm1, 4, 5, 6, 0, 26, -100, 218, 530, 296, 672, 154, -154, 1.39, 65};
+Perna EsqT = {&pwm1, 0, 1, 2, -35, 26, -100, 263, 603, 286, 702, 168, -260, -93.53, 55};
 
-Perna DirF = {&pwm2, 0, 1, 2, 35, 26, -100, 268, -52, 410, -14, 456, 876};
-Perna DirM = {&pwm2, 8, 9, 10, 0, 26, -100, 390, 18, 330, -6, 376, 684};
-Perna DirT = {&pwm2, 12, 13, 14, -35, 26, -100, 183, -157, 360, -104, 468, 880};
+Perna DirF = {&pwm2, 0, 1, 2, 35, 26, -100, 268, -52, 410, -14, 456, 876, 94.38, 55.5};
+Perna DirM = {&pwm2, 8, 9, 10, 0, 26, -100, 390, 18, 330, -6, 376, 684, 1.39, 65};
+Perna DirT = {&pwm2, 12, 13, 14, -35, 26, -100, 183, -157, 360, -104, 468, 880, -93.53, 55};
 
 /*
 ULTIMO:
@@ -439,7 +469,7 @@ void TaskTrajetoria(void *pvParameters) {
         vTaskDelay(pdMS_TO_TICKS(5));
     }
     else if(bolha == 5){//ESQUERDA
-        float angulo = float(angulo_joystick)*M_PI/180.0;
+        float angulo = (float(angulo_joystick)-90)*M_PI/180.0;
         EsqF.proximo_ponto_trajetoria(k, OFFSET_EF, -angulo);
         DirM.proximo_ponto_trajetoria(k, OFFSET_DM, angulo);
         EsqT.proximo_ponto_trajetoria(k, OFFSET_ET, -angulo);
