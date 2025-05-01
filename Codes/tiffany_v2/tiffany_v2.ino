@@ -11,9 +11,9 @@
 int OFFSET_EF = 0;
 int OFFSET_DT = METADE_PONTOS;
 int OFFSET_EM = METADE_PONTOS;
-int OFFSET_DM = 0;
-int OFFSET_ET = 0;
 int OFFSET_DF = METADE_PONTOS;
+int OFFSET_ET = 0;
+int OFFSET_DM = 0;
 
 int bolha = 0;
 
@@ -541,17 +541,17 @@ void TaskServos(void *pvParameters) {
       OFFSET_EF = 0;
       OFFSET_DT = METADE_PONTOS;
       OFFSET_EM = METADE_PONTOS;
-      OFFSET_DM = 0;
-      OFFSET_ET = 0;
       OFFSET_DF = METADE_PONTOS;
+      OFFSET_ET = 0;
+      OFFSET_DM = 0;
     }
     else if (GamePad.isCrossPressed()){
-      OFFSET_EF = TOTAL_PONTOS/6;
-      OFFSET_DT = 2*TOTAL_PONTOS/6;
-      OFFSET_EM = 3*TOTAL_PONTOS/6;
-      OFFSET_DM = 4*TOTAL_PONTOS/6;
-      OFFSET_ET = 5*TOTAL_PONTOS/6;
-      OFFSET_DF = 0;
+      OFFSET_EF = 0;
+      OFFSET_DT = TOTAL_PONTOS/6;
+      OFFSET_EM = 2*TOTAL_PONTOS/6;
+      OFFSET_DF = 3*TOTAL_PONTOS/6;
+      OFFSET_ET = 4*TOTAL_PONTOS/6;
+      OFFSET_DM = 5*TOTAL_PONTOS/6;
     }
     vTaskDelay(pdMS_TO_TICKS(20));
     
