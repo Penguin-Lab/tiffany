@@ -62,4 +62,6 @@ Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
   * Bateria Zippy 2200mAh 2s 6,6v (motores)
 
 # Software
-Na pasta de códigos, há o código de programação da ESP32 (38 pinos). Este é um exemplo em C++ de comando de movimentação da Tiffany. A ESP32 pode se comunicar com o aplicativo Dabble no celular e receber comandos de ação ou com o espaço inteligente e receber esses mesmos comandos.
+Na pasta de códigos, há dois códigos de programação da ESP32 (38 pinos). Eles são exemplos em C++ do comando de movimentação da Tiffany:
+* Dabble: a ESP32 pode se comunicar com o aplicativo Dabble no celular e receber comandos de ação;
+* Espaço Inteligente (IS): a ESP32 pode se comunicar com o Espaço Inteligente e receber esses mesmos comandos.
