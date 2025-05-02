@@ -58,8 +58,8 @@ Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
 * 2x Placas PCA9685 para comando dos 18 motores
 * Chave (switch)
 * Alimentação
-  * Bateria Zippy 1100mAh 2s 6,6V (ESP32)
-  * Bateria Zippy 2200mAh 2s 6,6v (motores)
+  * Bateria Zippy LiFe 1100mAh 2s 6,6V (ESP32)
+  * Bateria TM Hobbies LiFe 2100mAh 2s 6,6v (motores)
 
 # Software
 Na pasta de códigos, há dois códigos de programação da ESP32 (38 pinos). Eles são exemplos em C++ do comando de movimentação da Tiffany:
