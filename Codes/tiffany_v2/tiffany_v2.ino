@@ -221,7 +221,7 @@ struct Perna {
       this->z = pow(u, 3) * this->P0[1] + 3 * pow(u, 2) * t * this->P1[1] + 3 * u * pow(t, 2) * this->P2[1] + pow(t, 3) * this->P3[1];
     }
     else{
-      t = float(kn - METADE_PONTOS) / (METADE_PONTOS - 1);
+      t = float(TOTAL_PONTOS - 1 - kn) / (METADE_PONTOS - 1);
       d_theta = angulo*t;
       this->x = r*sin(theta_ini + d_theta) - this->Obodyx;
       this->y = r*cos(theta_ini + d_theta) - this->Obodyy - dy;
