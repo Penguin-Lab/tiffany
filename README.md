@@ -33,7 +33,7 @@ As peças em 3D desenvolvidas para este projeto foram baseadas no projeto do hex
 
 Obs: a tampa de 12 motores deverão ser trocadas pelas peças [TIFFANY_TAMPA_MOTOR.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TAMPA_MOTOR.STL) para que seja possível fixar os rolamentos nas patas. Serão utilizados 3 rolamentos por pata:
 
-<img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata0.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata1.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/corpo0.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/corpo1.png" width="300">
+<img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata0.png" height="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata1.png" height="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/corpo0.png" height="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/corpo1.png" height="300">
 
 ## Outros itens da estrutura
 Alguns outros itens são necessários para finalizar a estrutura da Tiffany:
@@ -41,20 +41,20 @@ Alguns outros itens são necessários para finalizar a estrutura da Tiffany:
 * 24x Parafusos m4 de cm: prender as peças [TIFFANY_OMBRO_DOWN_LEFT.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_OMBRO_DOWN_LEFT.STL) e [TIFFANY_OMBRO_UP.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_OMBRO_UP.STL)
 * 24x Parafusos m3 de cm: prender as peças [TIFFANY_TIBIA_LEFT.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TIBIA_LEFT.STL) nos motores
 * 6x Tiras de EVA: colocar na ponta das peças [TIFFANY_FOOT.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_FOOT.STL) para evitar que o robô deslize
+* Arruelas entre as peças [TIFFANY_SPACER.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_SPACER.STL) e [TIFFANY_BODY_UP.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_BODY_UP.STL) para ajustar a altura correta do interior do robô
 
-## Placas de circuito impresso
-No projeto, foi desenvolvida uma placa de circuito para servir como:
-* Shield para a ESP32 e sensores
-* Placa de alimentação dos motores
+## Placa de circuito impresso
+No projeto, foi desenvolvida uma placa de circuito para servir como shield para a ESP32 e conexão com as duas placas PCA9685.
 
-<img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/shield_esp_cut.png" width="220"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/alimentacao.png" width="220">
+<img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/shield_esp_foto.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/shield_esp_projeto.png" width="300">
 
 ## Componentes eletrônicos
 Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
-* Controlador com Wi-fi
+* Controlador com Wi-fi e Bluetooth
   * 1x ESP32 (38 pinos)
 * Motores
   * 18x Servo TowerPro MG995 Metálico
+* 2x Placas PCA9685 para comando dos 18 motores
 * Chave (switch)
 * Alimentação
   * Bateria Zippy 1100mAh 2s 6,6V (ESP32)
