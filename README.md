@@ -33,7 +33,7 @@ As peças em 3D desenvolvidas para este projeto foram baseadas no projeto do hex
 
 Obs: a tampa de 12 motores deverão ser trocadas pelas peças [TIFFANY_TAMPA_MOTOR.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TAMPA_MOTOR.STL) para que seja possível fixar os rolamentos nas patas. Serão utilizados 3 rolamentos por pata:
 
-<img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata0.png" width="300">
+<img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata0.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata1.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/corpo0.png" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/corpo1.png" width="300">
 
 ## Outros itens da estrutura
 Alguns outros itens são necessários para finalizar a estrutura da Tiffany:
@@ -55,6 +55,7 @@ Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
   * 1x ESP32 (38 pinos)
 * Motores
   * 18x Servo TowerPro MG995 Metálico
+* Chave (switch)
 * Alimentação
   * Bateria Zippy 1100mAh 2s 6,6V (ESP32)
   * Bateria Zippy 2200mAh 2s 6,6v (motores)
