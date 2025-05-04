@@ -241,7 +241,7 @@ struct Perna {
     float Py[4] = {this->y_ini, this->y_ini+dy1, this->y_ini+dy2, this->y_ini+dy};
     float dz1 = dz/4.0;
     float dz2 = dz/2.0;
-    float Pz[4] = {this->z_ini, this->z_ini+dz1, this->z_ini+dz2, this->z_ini+dz};
+    float Pz[4] = {this->z_ini, this->z_ini+dz1+6.0, this->z_ini+dz2+10.0, this->z_ini+dz};
     
     // Atualiza posição
     if (kn < METADE_PONTOS){
