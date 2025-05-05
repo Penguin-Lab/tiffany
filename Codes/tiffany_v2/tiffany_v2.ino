@@ -210,19 +210,27 @@ struct Perna {
     float d_theta;
     // Constantes
     float theta_ini = atan2((this->x_ini+this->Obodyx), (this->y_ini+this->Obodyy+dy));
+    float aux = this->x_ini+this->Obodyx;
+    Serial.print(aux);
+    Serial.print(":");
+    aux = this->y_ini+this->Obodyy+dy;
+    Serial.print(aux);
+    Serial.print(":");
+    Serial.println(theta_ini);
     float r = sqrt(pow(this->x_ini+this->Obodyx, 2) + pow(this->y_ini+this->Obodyy+dy, 2)); // Não sei se o +dy entra aqui ou é para diminuir o raio mesmo: +dr ou se é ir pra frente mas com passos de largura diferentes
+    float angulo_rad = (angulo/180.0)*M_PI;
     // Atualiza posição
     if (kn < METADE_PONTOS){
       t = float(kn)/(METADE_PONTOS-1);
       u = 1 - t;
-      d_theta = angulo*t;
+      d_theta = angulo_rad*t;
       this->x = r*sin(theta_ini + d_theta) - this->Obodyx;
       this->y = r*cos(theta_ini + d_theta) - this->Obodyy - dy;
       this->z = pow(u, 3) * this->P0[1] + 3 * pow(u, 2) * t * this->P1[1] + 3 * u * pow(t, 2) * this->P2[1] + pow(t, 3) * this->P3[1];
     }
     else{
       t = float(TOTAL_PONTOS - 1 - kn) / (METADE_PONTOS - 1);
-      d_theta = angulo*t;
+      d_theta = angulo_rad*t;
       this->x = r*sin(theta_ini + d_theta) - this->Obodyx;
       this->y = r*cos(theta_ini + d_theta) - this->Obodyy - dy;
       this->z = this->z_ini;
@@ -306,13 +314,13 @@ struct Perna {
 
 int angulo = 0;
 
-Perna EsqF = {&pwm1, 12, 13, 14, 35, 26, -100, 142, 426, 258, 682, 158, -258, 94.38, 55.5}; // ou 145, 475 -> 140, 470
-Perna EsqM = {&pwm1, 4, 5, 6, 0, 26, -100, 218, 530, 296, 672, 154, -154, 1.39, 65};
-Perna EsqT = {&pwm1, 0, 1, 2, -35, 26, -100, 263, 603, 286, 702, 168, -260, -93.53, 55};
+Perna EsqF = {&pwm1, 12, 13, 14, 35, 26, -100, 142, 426, 258, 682, 158, -258, 9.44, 5.55}; // ou 145, 475 -> 140, 470
+Perna EsqM = {&pwm1, 4, 5, 6, 0, 26, -100, 218, 530, 296, 672, 154, -154, 0.14, 6.5};
+Perna EsqT = {&pwm1, 0, 1, 2, -35, 26, -100, 263, 603, 286, 702, 168, -260, -9.35, 5.5};
 
-Perna DirF = {&pwm2, 0, 1, 2, 35, 26, -100, 268, -52, 410, -14, 456, 876, 94.38, 55.5};
-Perna DirM = {&pwm2, 8, 9, 10, 0, 26, -100, 390, 18, 330, -6, 376, 684, 1.39, 65};
-Perna DirT = {&pwm2, 12, 13, 14, -35, 26, -100, 183, -157, 360, -104, 468, 880, -93.53, 55};
+Perna DirF = {&pwm2, 0, 1, 2, 35, 26, -100, 268, -52, 410, -14, 456, 876, 9.44, 5.55};
+Perna DirM = {&pwm2, 8, 9, 10, 0, 26, -100, 390, 18, 330, -6, 376, 684, 0.14, 6.5};
+Perna DirT = {&pwm2, 12, 13, 14, -35, 26, -100, 183, -157, 360, -104, 468, 880, -9.35, 5.5};
 
 /*
 ULTIMO:
@@ -375,12 +383,12 @@ void TaskTrajetoria(void *pvParameters) {
   for (;;) {
     if (bolha == 1) {// Gira pra esquerda no proprio eixo
         //proximo_ponto_trajetoria_rodar(int k, int offset, float angulo, float dy)
-        EsqF.proximo_ponto_trajetoria_rodar(k, OFFSET_EF, -20, 0);
-        DirM.proximo_ponto_trajetoria_rodar(k, OFFSET_DM, +20, 0);
-        EsqT.proximo_ponto_trajetoria_rodar(k, OFFSET_ET, -20, 0);
-        DirF.proximo_ponto_trajetoria_rodar(k, OFFSET_DF, +20, 0);
-        EsqM.proximo_ponto_trajetoria_rodar(k, OFFSET_EM, -20, 0);
-        DirT.proximo_ponto_trajetoria_rodar(k, OFFSET_DT, +20, 0);
+        EsqF.proximo_ponto_trajetoria_rodar(k, OFFSET_EF, -10, 0);
+        DirM.proximo_ponto_trajetoria_rodar(k, OFFSET_DM, +10, 0);
+        EsqT.proximo_ponto_trajetoria_rodar(k, OFFSET_ET, -10, 0);
+        DirF.proximo_ponto_trajetoria_rodar(k, OFFSET_DF, +10, 0);
+        EsqM.proximo_ponto_trajetoria_rodar(k, OFFSET_EM, -10, 0);
+        DirT.proximo_ponto_trajetoria_rodar(k, OFFSET_DT, +10, 0);
         // Serial.print(String(EsqF.angulin,4) + " , ");
         // A partir dos x da trajetoria, atualiza os proxang
         EsqF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
@@ -395,22 +403,22 @@ void TaskTrajetoria(void *pvParameters) {
         DirF.moverPerna();
         EsqM.moverPerna();
         DirT.moverPerna();
-        if (k == 0){
-          k = TOTAL_PONTOS - 1;
+        if (k == TOTAL_PONTOS - 1){
+          k = 0;
         }
         else{
-          k--;
+          k++;
         }
-        vTaskDelay(pdMS_TO_TICKS(5));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
     else if(bolha == 2){// Gira pra direita no proprio eixo
         //proximo_ponto_trajetoria_rodar(int k, int offset, float angulo, float dy)
-        EsqF.proximo_ponto_trajetoria_rodar(k, OFFSET_EF, +20, 0);
-        DirM.proximo_ponto_trajetoria_rodar(k, OFFSET_DM, -20, 0);
-        EsqT.proximo_ponto_trajetoria_rodar(k, OFFSET_ET, +20, 0);
-        DirF.proximo_ponto_trajetoria_rodar(k, OFFSET_DF, -20, 0);
-        EsqM.proximo_ponto_trajetoria_rodar(k, OFFSET_EM, +20, 0);
-        DirT.proximo_ponto_trajetoria_rodar(k, OFFSET_DT, -20, 0);
+        EsqF.proximo_ponto_trajetoria_rodar(k, OFFSET_EF, +10, 0);
+        DirM.proximo_ponto_trajetoria_rodar(k, OFFSET_DM, -10, 0);
+        EsqT.proximo_ponto_trajetoria_rodar(k, OFFSET_ET, +10, 0);
+        DirF.proximo_ponto_trajetoria_rodar(k, OFFSET_DF, -10, 0);
+        EsqM.proximo_ponto_trajetoria_rodar(k, OFFSET_EM, +10, 0);
+        DirT.proximo_ponto_trajetoria_rodar(k, OFFSET_DT, -10, 0);
         // Serial.print(String(EsqF.angulin,4) + " , ");
         // A partir dos x da trajetoria, atualiza os proxang
         EsqF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
@@ -425,22 +433,22 @@ void TaskTrajetoria(void *pvParameters) {
         DirF.moverPerna();
         EsqM.moverPerna();
         DirT.moverPerna();
-        if (k == 0){
-          k = TOTAL_PONTOS - 1;
+        if (k == TOTAL_PONTOS - 1){
+          k = 0;
         }
         else{
-          k--;
+          k++;
         }
-        vTaskDelay(pdMS_TO_TICKS(5));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
     else if(bolha == 3){// Gira pra esquerda em torno de algo
         //proximo_ponto_trajetoria_rodar(int k, int offset, float angulo, float dy)
-        EsqF.proximo_ponto_trajetoria_rodar(k, OFFSET_EF, -20, -40);
-        DirM.proximo_ponto_trajetoria_rodar(k, OFFSET_DM, +20, 40);
-        EsqT.proximo_ponto_trajetoria_rodar(k, OFFSET_ET, -20, -40);
-        DirF.proximo_ponto_trajetoria_rodar(k, OFFSET_DF, +20, 40);
-        EsqM.proximo_ponto_trajetoria_rodar(k, OFFSET_EM, -20, -40);
-        DirT.proximo_ponto_trajetoria_rodar(k, OFFSET_DT, +20, 40);
+        EsqF.proximo_ponto_trajetoria_rodar(k, OFFSET_EF, -10, -10);
+        DirM.proximo_ponto_trajetoria_rodar(k, OFFSET_DM, +10, 10);
+        EsqT.proximo_ponto_trajetoria_rodar(k, OFFSET_ET, -10, -10);
+        DirF.proximo_ponto_trajetoria_rodar(k, OFFSET_DF, +10, 10);
+        EsqM.proximo_ponto_trajetoria_rodar(k, OFFSET_EM, -10, -10);
+        DirT.proximo_ponto_trajetoria_rodar(k, OFFSET_DT, +10, 10);
         // Serial.print(String(EsqF.angulin,4) + " , ");
         // A partir dos x da trajetoria, atualiza os proxang
         EsqF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
@@ -455,17 +463,17 @@ void TaskTrajetoria(void *pvParameters) {
         DirF.moverPerna();
         EsqM.moverPerna();
         DirT.moverPerna();
-        if (k == 0){
-          k = TOTAL_PONTOS - 1;
+        if (k == TOTAL_PONTOS - 1){
+          k = 0;
         }
         else{
-          k--;
+          k++;
         }
-        vTaskDelay(pdMS_TO_TICKS(5));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
     else if(bolha == 4){//Mover patinha para a posição X = [x_ini+10;y_ini;z_ini+10]
         float angulo = M_PI/6.0;
-        float pos_x = 10;
+        float pos_x = -10;
         float pos_y = 0;
         float pos_z = 10;
         DirF.proximo_ponto_pata(k, 0, pos_x, pos_y, pos_z);
@@ -475,7 +483,7 @@ void TaskTrajetoria(void *pvParameters) {
         if (k < METADE_PONTOS){
           k++;
         }
-        vTaskDelay(pdMS_TO_TICKS(5));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
     else if(bolha == 5){//ESQUERDA
         float angulo = (float(angulo_joystick)-90)*M_PI/180.0;
@@ -505,7 +513,7 @@ void TaskTrajetoria(void *pvParameters) {
         else{
           k--;
         }
-        vTaskDelay(pdMS_TO_TICKS(5));
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
     else{
       k = 0;
@@ -555,23 +563,22 @@ void TaskServos(void *pvParameters) {
       OFFSET_DM = 0;
     }
     else if (GamePad.isCrossPressed()){
+      /*
       OFFSET_EF = 0;
       OFFSET_DM = TOTAL_PONTOS/6;
       OFFSET_ET = 2*TOTAL_PONTOS/6;
       OFFSET_DT = 3*TOTAL_PONTOS/6;
       OFFSET_EM = 4*TOTAL_PONTOS/6;
       OFFSET_DF = 5*TOTAL_PONTOS/6;
-      /*
+      */
       OFFSET_EF = 0;
       OFFSET_DT = TOTAL_PONTOS/6;
       OFFSET_EM = 2*TOTAL_PONTOS/6;
       OFFSET_DF = 3*TOTAL_PONTOS/6;
       OFFSET_ET = 4*TOTAL_PONTOS/6;
       OFFSET_DM = 5*TOTAL_PONTOS/6;
-      */
     }
     vTaskDelay(pdMS_TO_TICKS(20));
-    
     
   }
 }
