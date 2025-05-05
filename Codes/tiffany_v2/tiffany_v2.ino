@@ -468,7 +468,7 @@ void TaskTrajetoria(void *pvParameters) {
         float pos_x = 10;
         float pos_y = 0;
         float pos_z = 10;
-        DirF.proximo_ponto_pata(k, 0, angulo, pos_x, pos_y, pos_z);
+        DirF.proximo_ponto_pata(k, 0, pos_x, pos_y, pos_z);
         // A partir dos x da trajetoria, atualiza os proxang
         DirF.cinematica_inversa(2.6, 9.0, 12.16); // pega o valor de this->x e atualiza os proxang
         DirF.moverPerna();
