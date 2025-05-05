@@ -46,7 +46,7 @@ Alguns outros itens são necessários para finalizar a estrutura da Tiffany:
 ## Placa de circuito impresso
 No projeto, foi desenvolvida uma placa de circuito para servir como shield para a ESP32 e conexão com as duas placas PCA9685.
 
-<img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/shield_esp_foto0.jpeg" width="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/shield_esp_projeto.png" width="300">
+<img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/shield_esp_foto0.jpeg" height="600"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/shield_esp_projeto.png" height="600">
 
 
 ## Componentes eletrônicos
