@@ -7,33 +7,62 @@ A estrutura física do robô é composta por seis patas de três eixos cada (tr�
 <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/tiffany0.jpeg" height="250"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/tiffany3.jpeg" height="250"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/tiffany2.jpeg" width="350"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/tiffany1.jpeg" width="350">
 
 ## Peças 3D em STL
-As peças em 3D desenvolvidas para este projeto foram baseadas no projeto do hexapod Steve da Eng. Eletricista Bruna Reis Lyra. Na pasta Pecas_3d, estão listadas essas peças em STL. Para ajudar, segue abaixo uma lista de todas as peças que devem ser impressas e qual o valor da sua maior dimensão (para ajudar na escolha da impressora):
-* Corpo
-  * 1x [TIFFANY_BODY_DOWN.STL (230 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_BODY_DOWN.STL)
-  * 1x [TIFFANY_BODY_UP.STL (230 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_BODY_UP.STL)
-  * 6x [TIFFANY_SPACER.STL (68 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_SPACER.STL)
-  * 1x [TIFFANY_SUPPORT_PCI.STL (120 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_SUPPORT_PCI.STL)
-  * 1x [TIFFANY_SUPPORT_SWITCH.STL (50 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_SUPPORT_SWITCH.STL)
-* Patas
-  * 6x [TIFFANY_TIBIA_LEFT.STL (141 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TIBIA_LEFT.STL)
-  * 6x [TIFFANY_TIBIA_LEFT.STL espelhado (141 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TIBIA_LEFT.STL)
-  * 6x [TIFFANY_TIBIA_MIDDLE.STL (63 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TIBIA_MIDDLE.STL)
-  * 6x [TIFFANY_TIBIA_TUBO.STL (10 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TIBIA_TUBO.STL)
-  * 6x [TIFFANY_FOOT.STL (25 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_FOOT.STL)
-  * 3x [TIFFANY_FEMUR_FRONT.STL (110 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_FEMUR_FRONT.STL)
-  * 3x [TIFFANY_FEMUR_BACK.STL (118 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_FEMUR_BACK.STL)
-  * 3x [TIFFANY_FEMUR_FRONT.STL espelhado (110 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_FEMUR_FRONT.STL)
-  * 3x [TIFFANY_FEMUR_BACK.STL espelhado (118 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_FEMUR_BACK.STL)
-  * 6x [TIFFANY_FEMUR_MIDDLE.STL (51 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_FEMUR_MIDDLE.STL)
-  * 6x [TIFFANY_OMBRO_UP.STL (61 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_OMBRO_UP.STL)
-  * 3x [TIFFANY_OMBRO_DOWN_LEFT.STL (61 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_OMBRO_DOWN_LEFT.STL)
-  * 3x [TIFFANY_OMBRO_DOWN_LEFT.STL espelhado (61 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_OMBRO_DOWN_LEFT.STL)
-* Motor
-  * 12x [TIFFANY_TAMPA_MOTOR.STL (41 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TAMPA_MOTOR.STL)
+As peças em 3D desenvolvidas para este projeto foram baseadas no projeto do hexapod Steve da Eng. Eletricista Bruna Reis Lyra. Na pasta Pecas_3d, é possível encontrar duas versões dessas peças em STL: uma desenhada para o motor servo TowerPro MG995 (v1) e outra para o DS3230 (v2). Para ajudar, segue abaixo uma lista de todas as peças que devem ser impressas e qual o valor da sua maior dimensão (para ajudar na escolha da impressora):
 
-Obs: a tampa de 12 motores deverão ser trocadas pelas peças [TIFFANY_TAMPA_MOTOR.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/TIFFANY_TAMPA_MOTOR.STL) para que seja possível fixar os rolamentos nas patas. Serão utilizados 3 rolamentos por pata:
+### V1: Versão para o motor servo TowerPro MG995 
+* Corpo
+  * 1x [TIFFANY_BODY_DOWN.STL (230 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_BODY_DOWN.STL)
+  * 1x [TIFFANY_BODY_UP.STL (230 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_BODY_UP.STL)
+  * 6x [TIFFANY_SPACER.STL (68 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_SPACER.STL)
+  * 1x [TIFFANY_SUPPORT_PCI.STL (120 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_SUPPORT_PCI.STL)
+  * 1x [TIFFANY_SUPPORT_SWITCH.STL (50 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_SUPPORT_SWITCH.STL)
+* Patas
+  * 6x [TIFFANY_TIBIA_LEFT.STL (141 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_TIBIA_LEFT.STL)
+  * 6x [TIFFANY_TIBIA_LEFT.STL espelhado (141 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_TIBIA_LEFT.STL)
+  * 6x [TIFFANY_TIBIA_MIDDLE.STL (63 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_TIBIA_MIDDLE.STL)
+  * 6x [TIFFANY_TIBIA_TUBO.STL (10 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_TIBIA_TUBO.STL)
+  * 6x [TIFFANY_FOOT.STL (25 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_FOOT.STL)
+  * 3x [TIFFANY_FEMUR_FRONT.STL (110 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_FEMUR_FRONT.STL)
+  * 3x [TIFFANY_FEMUR_BACK.STL (118 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_FEMUR_BACK.STL)
+  * 3x [TIFFANY_FEMUR_FRONT.STL espelhado (110 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_FEMUR_FRONT.STL)
+  * 3x [TIFFANY_FEMUR_BACK.STL espelhado (118 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_FEMUR_BACK.STL)
+  * 6x [TIFFANY_FEMUR_MIDDLE.STL (51 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_FEMUR_MIDDLE.STL)
+  * 6x [TIFFANY_OMBRO_UP.STL (61 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_OMBRO_UP.STL)
+  * 3x [TIFFANY_OMBRO_DOWN_LEFT.STL (61 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_OMBRO_DOWN_LEFT.STL)
+  * 3x [TIFFANY_OMBRO_DOWN_LEFT.STL espelhado (61 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_OMBRO_DOWN_LEFT.STL)
+* Motor
+  * 12x [TIFFANY_TAMPA_MOTOR.STL (41 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_TAMPA_MOTOR.STL)
+
+Obs: a tampa de 12 motores deverão ser trocadas pelas peças [TIFFANY_TAMPA_MOTOR.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v1/TIFFANY_TAMPA_MOTOR.STL) para que seja possível fixar os rolamentos nas patas. Serão utilizados 3 rolamentos por pata:
 
 <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata0.png" height="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/pata1.png" height="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/corpo0.png" height="300"> <img src="https://github.com/Penguin-Lab/tiffany/blob/main/images/corpo1.png" height="300">
+
+### V2: Versão para o motor servo DS3230 PRO-180 
+* Corpo
+  * 1x [TIFFANY_BODY_DOWN.STL (230 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_BODY_DOWN.STL)
+  * 1x [TIFFANY_BODY_UP.STL (230 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_BODY_UP.STL)
+  * 4x [TIFFANY_SPACER.STL (68 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SPACER.STL)
+  * 2x [TIFFANY_SPACER_FRONT.STL (68 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SPACER_FRONT.STL)
+  * 1x [TIFFANY_SUPPORT_PCI.STL (120 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SUPPORT_PCI.STL)
+  * 1x [TIFFANY_SUPPORT_SWITCH.STL (50 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SUPPORT_SWITCH.STL)
+* Patas
+  * 6x [TIFFANY_TIBIA_LEFT.STL (141 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_TIBIA_LEFT.STL)
+  * 6x [TIFFANY_TIBIA_LEFT.STL espelhado (141 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_TIBIA_LEFT.STL)
+  * 6x [TIFFANY_TIBIA_MIDDLE.STL (63 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_TIBIA_MIDDLE.STL)
+  * 6x [TIFFANY_TIBIA_TUBO.STL (10 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_TIBIA_TUBO.STL)
+  * 6x [TIFFANY_FOOT.STL (25 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_FOOT.STL)
+  * 3x [TIFFANY_FEMUR_FRONT.STL (110 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_FEMUR_FRONT.STL)
+  * 3x [TIFFANY_FEMUR_BACK.STL (118 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_FEMUR_BACK.STL)
+  * 3x [TIFFANY_FEMUR_FRONT.STL espelhado (110 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_FEMUR_FRONT.STL)
+  * 3x [TIFFANY_FEMUR_BACK.STL espelhado (118 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_FEMUR_BACK.STL)
+  * 6x [TIFFANY_FEMUR_MIDDLE.STL (51 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_FEMUR_MIDDLE.STL)
+  * 6x [TIFFANY_OMBRO_UP.STL (61 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_OMBRO_UP.STL)
+  * 3x [TIFFANY_OMBRO_DOWN_LEFT.STL (61 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_OMBRO_DOWN_LEFT.STL)
+  * 3x [TIFFANY_OMBRO_DOWN_LEFT.STL espelhado (61 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_OMBRO_DOWN_LEFT.STL)
+* Motor
+  * 12x [TIFFANY_TAMPA_MOTOR_DS3230.STL (41 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_TAMPA_MOTOR_DS3230.STL)
+
+Obs: no caso do DS3230, a tampa de 12 motores deverão ser trocadas pelas peças [TIFFANY_TAMPA_MOTOR_DS3230.STL](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_TAMPA_MOTOR_DS3230.STL) para que seja possível fixar os rolamentos nas patas. Serão utilizados 3 rolamentos por pata.
 
 ## Outros itens da estrutura
 Alguns outros itens são necessários para finalizar a estrutura da Tiffany:
@@ -54,7 +83,8 @@ Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
 * Controlador com Wi-fi e Bluetooth
   * 1x ESP32 (38 pinos)
 * Motores
-  * 18x Servo TowerPro MG995 Metálico
+  * 18x Servo TowerPro MG995 Metálico ou
+  * 18x Servo DS3230 PRO-180
 * 2x Placas PCA9685 para comando dos 18 motores
 * Chave (switch)
 * Alimentação
