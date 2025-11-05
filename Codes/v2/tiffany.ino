@@ -777,8 +777,8 @@ void TaskComunicacao(void *pvParameters);
 
 void setup() {
   Serial.begin(38400);
-  Dabble.begin("Scarlet");
-  Serial.println("Scarlet ligada!");
+  Dabble.begin("Tiffany");
+  Serial.println("Tiffany ligada!");
 
   pwmE.begin();
   pwmE.setPWMFreq(50);
