@@ -41,8 +41,8 @@ Obs: a tampa de 12 motores deverão ser trocadas pelas peças [TIFFANY_TAMPA_MOT
 * Corpo
   * 1x [TIFFANY_BODY_DOWN.STL (230 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_BODY_DOWN.STL)
   * 1x [TIFFANY_BODY_UP.STL (230 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_BODY_UP.STL)
-  * 4x [TIFFANY_SPACER.STL (68 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SPACER.STL)
-  * 2x [TIFFANY_SPACER_FRONT.STL (68 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SPACER_FRONT.STL)
+  * 4x [TIFFANY_SPACER.STL (67 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SPACER.STL)
+  * 2x [TIFFANY_SPACER_FRONT.STL (63 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SPACER_FRONT.STL)
   * 1x [TIFFANY_SUPPORT_PCI.STL (120 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SUPPORT_PCI.STL)
   * 1x [TIFFANY_SUPPORT_SWITCH.STL (50 mm)](https://github.com/Penguin-Lab/tiffany/blob/main/Pecas_3d/v2/TIFFANY_SUPPORT_SWITCH.STL)
 * Patas
