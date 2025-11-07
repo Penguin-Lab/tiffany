@@ -81,17 +81,30 @@ No projeto, foi desenvolvida uma placa de circuito para servir como shield para 
 
 
 ## Componentes eletrônicos
-Os componentes eletrônicos embarcados no robô e equipamentos utilizados são:
+Os componentes eletrônicos embarcados no robô e equipamentos utilizados estão listados abaixo.
+### V1: Versão para o motor servo TowerPro MG995 
 * Controlador com Wi-fi e Bluetooth
   * 1x ESP32 (38 pinos)
 * Motores
-  * 18x Servo TowerPro MG995 Metálico ou
-  * 18x Servo DS3230 PRO-180
-* 2x Placas PCA9685 para comando dos 18 motores
+  * 18x Servo TowerPro MG995 Metálico
+* 2x Placas PCA9685 para comando dos 18 motores (9 motores em cada)
 * Chave (switch)
 * Alimentação
   * Bateria Zippy LiFe 1100mAh 2s 6,6V (ESP32)
   * Bateria TM Hobbies LiFe 2100mAh 2s 6,6v (motores)
+
+### V2: Versão para o motor servo DS3230 PRO-180 
+* Controlador com Wi-fi e Bluetooth
+  * 1x ESP32 (38 pinos)
+* Motores
+  * 18x Servo DS3230 PRO-180
+* 2x Placas PCA9685 para comando dos 18 motores (9 motores em cada)
+* Chave (switch)
+* Chave pequena (switch)
+* Alimentação
+  * Regulador para 5V (ESP32)
+  * Regulador HV SBEC YPG 20A configurado para saída de 6V (motores)
+  * Bateria LiPo 5000mAh 3s 11,1V (motores)
 
 # Software
 Na pasta de códigos, há dois códigos de programação da ESP32 (38 pinos). Eles são exemplos em C++ do comando de movimentação da Tiffany:
