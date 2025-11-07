@@ -105,11 +105,31 @@ struct floatxyz {
 };
 
 float joystickToRad(int joystickAngle){
-  float angle_rad = (float(joystickAngle)-90)*M_PI/180.0;
-  if (angle_rad > M_PI){
-    return angle_rad - 2*M_PI;
-  }
+  float angle_rad = (float(joystickAngle)-90.0)*M_PI/180.0;
+  while (angle_rad > M_PI) angle_rad -= 2*M_PI;
+  while (angle_rad < -M_PI) angle_rad += 2*M_PI;
   return angle_rad;
+}
+
+float joystickToRad(int joystickAngle, int deltaAngle){
+  float angle_float = float(joystickAngle)-90.0;
+  float delta_float = float(deltaAngle);
+  while (angle_float > 180.0) angle_float -= 360.0;
+  while (angle_float < -180.0) angle_float += 360.0;
+  // Verifica faixas e "trava" no valor mais proximo
+  if (fabs(angle_float - 180) <= delta_float || fabs(angle_float + 180) <= delta_float){
+    angle_float = 180;
+  }
+  else if (fabs(angle_float - 90) <= delta_float){
+    angle_float = 90;
+  }
+  else if (fabs(angle_float + 90) <= delta_float){
+    angle_float = -90;
+  }
+  else if (fabs(angle_float) <= delta_float){
+    angle_float = 0;
+  }
+  return angle_float*M_PI/180.0;
 }
 
 struct Pata {
@@ -293,11 +313,11 @@ struct Pata {
     this->P0[0] = this->xyz_ini.x - half_stepping;
     this->P0[1] = this->xyz_ini.z;
     this->P1[0] = this->P0[0] + half_stepping/2.0;
-    this->P1[1] = this->P0[1] + 2.0*abs(half_stepping);
+    this->P1[1] = this->P0[1] + 2.0*fabs(half_stepping);
     this->P3[0] = this->P0[0] + step_length;
     this->P3[1] = this->P0[1];
     this->P2[0] = this->P3[0] - half_stepping/2.0;
-    this->P2[1] = this->P0[1] + abs(2.0*half_stepping);
+    this->P2[1] = this->P0[1] + fabs(2.0*half_stepping);
   }
 
   floatxyz iniciaPata(int3 anglesIni) {
@@ -340,14 +360,17 @@ struct Hexapod {
   }
   
   void ligarHexapod(){
-    int totalPontos = 200;
+    int totalPontos = 100;
     int metadePontos = totalPontos/2;
     int3 anglesF = {45,26,-100};
     int3 anglesM = {0,26,-100};
     int3 anglesT = {-45,26,-100};
-    int3 anglesStartF = {anglesF.ombro,90,-145};
-    int3 anglesStartM = {anglesM.ombro,90,-145};
-    int3 anglesStartT = {anglesT.ombro,90,-145};
+    int3 anglesStartF = {anglesF.ombro,90,-100};
+    int3 anglesStartM = {anglesM.ombro,90,-100};
+    int3 anglesStartT = {anglesT.ombro,90,-100};
+    // int3 anglesStartF = {anglesF.ombro,90,-145};
+    // int3 anglesStartM = {anglesM.ombro,90,-145};
+    // int3 anglesStartT = {anglesT.ombro,90,-145};
     // Manda a pata para a posicao inicial de coccum e guarda o xyz
     floatxyz xyzStartEsqF = this->EsqF.iniciaPata(anglesStartF);
     floatxyz xyzStartEsqM = this->EsqM.iniciaPata(anglesStartM);
@@ -362,7 +385,7 @@ struct Hexapod {
     this->DirF.escolheXyzini(anglesF);
     this->DirM.escolheXyzini(anglesM);
     this->DirT.escolheXyzini(anglesT);
-    delay(2000);
+    delay(1000);
     // Move as patas para (x_ini,y_ini,zStart)
     int k = 0;
     #if DEBUG_SIMULADOR
@@ -391,9 +414,9 @@ struct Hexapod {
         this->enviarAngulos(k);
       #endif
       k++;
-      delay(10);
+      delay(20);
     }
-    delay(2000);
+    delay(1000);
     // Atualiza a posicao inicial da pata para antes de descer para xyzini
     xyzStartEsqF = {this->EsqF.xyz_ini.x,this->EsqF.xyz_ini.y,xyzStartEsqF.z};
     xyzStartEsqM = {this->EsqM.xyz_ini.x,this->EsqM.xyz_ini.y,xyzStartEsqM.z};
@@ -426,19 +449,22 @@ struct Hexapod {
         this->enviarAngulos(k);
       #endif					 
       k++;
-      delay(10);
+      delay(20);
     }
   }
 
   void desligarHexapod(){
-    int totalPontos = 200;
+    int totalPontos = 100;
     int metadePontos = totalPontos/2;
     int3 anglesF = {45,26,-100};
     int3 anglesM = {0,26,-100};
     int3 anglesT = {-45,26,-100};
-    int3 anglesStartF = {anglesF.ombro,90,-145};
-    int3 anglesStartM = {anglesM.ombro,90,-145};
-    int3 anglesStartT = {anglesT.ombro,90,-145};
+    int3 anglesStartF = {anglesF.ombro,90,-100};
+    int3 anglesStartM = {anglesM.ombro,90,-100};
+    int3 anglesStartT = {anglesT.ombro,90,-100};
+    // int3 anglesStartF = {anglesF.ombro,90,-145};
+    // int3 anglesStartM = {anglesM.ombro,90,-145};
+    // int3 anglesStartT = {anglesT.ombro,90,-145};
     // Gero os xyz desses angulos
     floatxyz xyzStartEsqF = this->EsqF.cinematicaDireta(anglesStartF);
     floatxyz xyzStartDirM = this->DirM.cinematicaDireta(anglesStartM);
@@ -474,9 +500,9 @@ struct Hexapod {
         this->enviarAngulos(k);
       #endif	 
       k++;
-      delay(10);
+      delay(20);
     }
-    delay(2000);
+    delay(1000);
     // Gera o xyz da posicao aberta elevada
     floatxyz xyzCoccumEsqF = {this->EsqF.xyz_ini.x,this->EsqF.xyz_ini.y,xyzStartEsqF.z};
     floatxyz xyzCoccumEsqM = {this->EsqM.xyz_ini.x,this->EsqM.xyz_ini.y,xyzStartEsqM.z};
@@ -512,7 +538,7 @@ struct Hexapod {
         this->enviarAngulos(k);
       #endif				 
       k++;
-      delay(10);
+      delay(20);
     }
   }
 
@@ -666,7 +692,7 @@ struct Hexapod {
   }
 
   int andarCircular(int k, float angle_rad){
-    float angle_abs_rad = abs(angle_rad);
+    float angle_abs_rad = fabs(angle_rad);
     float angle_max = M_PI/9.0;
     floatxyz xyzEsqF = this->EsqF.trajetoriaLinear(this->EsqF.xyz_ini, k, OFFSET_ESQF, 0);
     floatxyz xyzDirM = this->DirM.trajetoriaLinear(this->DirM.xyz_ini, k, OFFSET_DIRM, 0);
@@ -676,10 +702,10 @@ struct Hexapod {
     floatxyz xyzDirT = this->DirT.trajetoriaLinear(this->DirT.xyz_ini, k, OFFSET_DIRT, 0);
 	  float v_mult = 1.0;
     float w_mult = 1.0;
-    if ((angle_abs_rad > (M_PI-(M_PI/9)))||(angle_abs_rad < (M_PI/9))){  // indo para frente ou para tras
+    if ((angle_abs_rad == M_PI)||(angle_abs_rad == 0)){  // indo para frente ou para tras
       w_mult = 0.0;
     }
-    else if ((angle_abs_rad > ((M_PI/2)-(M_PI/9)))&&(angle_abs_rad < ((M_PI/2)+(M_PI/9)))){  // girando para direita ou esquerda
+    else if (angle_abs_rad == M_PI/2){  // girando para direita ou esquerda
       v_mult = 0.0;
     }
     if (angle_rad > 0){  // girar para direita ou esquerda
@@ -833,7 +859,7 @@ void TaskHexapod(void *pvParameters) {
         vTaskDelay(pdMS_TO_TICKS(20));
     }
     else if(estado == 3){ // Andar omnidirecional ou rotacional
-        float angle_rad = joystickToRad(angle_joystick);
+        float angle_rad = joystickToRad(angle_joystick,20);
         if (mode == 0){
           k = scarlet.andar(k,angle_rad);
         }
