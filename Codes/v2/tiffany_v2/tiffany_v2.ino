@@ -364,12 +364,9 @@ struct Hexapod {
     int3 anglesF = {45,26,-100};
     int3 anglesM = {0,26,-100};
     int3 anglesT = {-45,26,-100};
-    int3 anglesStartF = {anglesF.ombro,90,-100};
-    int3 anglesStartM = {anglesM.ombro,90,-100};
-    int3 anglesStartT = {anglesT.ombro,90,-100};
-    // int3 anglesStartF = {anglesF.ombro,90,-145};
-    // int3 anglesStartM = {anglesM.ombro,90,-145};
-    // int3 anglesStartT = {anglesT.ombro,90,-145};
+    int3 anglesStartF = {anglesF.ombro,90,-135};
+    int3 anglesStartM = {anglesM.ombro,90,-135};
+    int3 anglesStartT = {anglesT.ombro,90,-135};
     // Manda a pata para a posicao inicial de coccum e guarda o xyz
     floatxyz xyzStartEsqF = this->EsqF.iniciaPata(anglesStartF);
     floatxyz xyzStartEsqM = this->EsqM.iniciaPata(anglesStartM);
@@ -458,12 +455,9 @@ struct Hexapod {
     int3 anglesF = {45,26,-100};
     int3 anglesM = {0,26,-100};
     int3 anglesT = {-45,26,-100};
-    int3 anglesStartF = {anglesF.ombro,90,-100};
-    int3 anglesStartM = {anglesM.ombro,90,-100};
-    int3 anglesStartT = {anglesT.ombro,90,-100};
-    // int3 anglesStartF = {anglesF.ombro,90,-145};
-    // int3 anglesStartM = {anglesM.ombro,90,-145};
-    // int3 anglesStartT = {anglesT.ombro,90,-145};
+    int3 anglesStartF = {anglesF.ombro,90,-135};
+    int3 anglesStartM = {anglesM.ombro,90,-135};
+    int3 anglesStartT = {anglesT.ombro,90,-135};
     // Gero os xyz desses angulos
     floatxyz xyzStartEsqF = this->EsqF.cinematicaDireta(anglesStartF);
     floatxyz xyzStartDirM = this->DirM.cinematicaDireta(anglesStartM);
