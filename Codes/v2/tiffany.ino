@@ -111,25 +111,24 @@ float joystickToRad(int joystickAngle){
   return angle_rad;
 }
 
-float joystickToRad(int joystickAngle, int deltaAngle){
-  float angle_float = float(joystickAngle)-90.0;
-  float delta_float = float(deltaAngle);
-  while (angle_float > 180.0) angle_float -= 360.0;
-  while (angle_float < -180.0) angle_float += 360.0;
+int joystickToInt(int joystickAngle, int deltaAngle){
+  int angle = joystickAngle-90;
+  while (angle > 180) angle -= 360;
+  while (angle < -180) angle += 360;
   // Verifica faixas e "trava" no valor mais proximo
-  if (fabs(angle_float - 180) <= delta_float || fabs(angle_float + 180) <= delta_float){
-    angle_float = 180;
+  if (abs(angle - 180) <= deltaAngle || abs(angle + 180) <= deltaAngle){
+    return 180;
   }
-  else if (fabs(angle_float - 90) <= delta_float){
-    angle_float = 90;
+  else if (abs(angle - 90) <= deltaAngle){
+    return 90;
   }
-  else if (fabs(angle_float + 90) <= delta_float){
-    angle_float = -90;
+  else if (abs(angle + 90) <= deltaAngle){
+    return -90;
   }
-  else if (fabs(angle_float) <= delta_float){
-    angle_float = 0;
+  else if (abs(angle) <= deltaAngle){
+    return 0;
   }
-  return angle_float*M_PI/180.0;
+  return angle;
 }
 
 struct Pata {
@@ -691,8 +690,8 @@ struct Hexapod {
     }
   }
 
-  int andarCircular(int k, float angle_rad){
-    float angle_abs_rad = fabs(angle_rad);
+  int andarCircular(int k, float angle){
+    float angle_abs = abs(angle);
     float angle_max = M_PI/9.0;
     floatxyz xyzEsqF = this->EsqF.trajetoriaLinear(this->EsqF.xyz_ini, k, OFFSET_ESQF, 0);
     floatxyz xyzDirM = this->DirM.trajetoriaLinear(this->DirM.xyz_ini, k, OFFSET_DIRM, 0);
@@ -702,15 +701,15 @@ struct Hexapod {
     floatxyz xyzDirT = this->DirT.trajetoriaLinear(this->DirT.xyz_ini, k, OFFSET_DIRT, 0);
 	  float v_mult = 1.0;
     float w_mult = 1.0;
-    if ((angle_abs_rad == M_PI)||(angle_abs_rad == 0)){  // indo para frente ou para tras
+    if ((angle_abs == 180)||(angle_abs == 0)){  // indo para frente ou para tras
       w_mult = 0.0;
     }
-    else if (angle_abs_rad == M_PI/2){  // girando para direita ou esquerda
+    else if (angle_abs == 90){  // girando para direita ou esquerda
       v_mult = 0.0;
     }
-    if (angle_rad > 0){  // girar para direita ou esquerda
-      angle_max = -angle_max;
-      if (angle_abs_rad > M_PI/2) angle_max = -angle_max;
+    if (angle < 0){  // girar para direita ou esquerda
+      if (angle_abs > 90) angle_max = -angle_max;
+      else angle_max = -angle_max;
     }
     floatxyz signalsDir = {-1.0,-1.0,1.0};
     floatxyz signalsEsq = {-1.0,1.0,1.0};
@@ -746,7 +745,7 @@ struct Hexapod {
     this->EsqM.moverPata(anglesEsqM.ombro, anglesEsqM.femur, anglesEsqM.tibia);
     this->DirT.moverPata(anglesDirT.ombro, anglesDirT.femur, anglesDirT.tibia);
     
-    if (angle_abs_rad > M_PI/2){
+    if (angle_abs > 90){
       if (k == 0){
         return TOTAL_PONTOS - 1;
       }
@@ -859,12 +858,13 @@ void TaskHexapod(void *pvParameters) {
         vTaskDelay(pdMS_TO_TICKS(20));
     }
     else if(estado == 3){ // Andar omnidirecional ou rotacional
-        float angle_rad = joystickToRad(angle_joystick,20);
+        float angle = joystickToInt(angle_joystick,20);
         if (mode == 0){
+          float angle_rad = angle*M_PI/180.0;
           k = scarlet.andar(k,angle_rad);
         }
         else{
-          k = scarlet.andarCircular(k,angle_rad);
+          k = scarlet.andarCircular(k,angle);
         }
         #if DEBUG_SIMULADOR
           scarlet.enviarAngulos(k);
