@@ -803,7 +803,7 @@ Pata EsqT = {&pwmE, 0, 1, 2, 316, 730, 325, 731, 136, -283};        // Zioto e J
 
 Pata DirF = {&pwmD, 0, 1, 2, 326, -80, 301, -103, 490, 891};         // Gustavo e Duda
 Pata DirM = {&pwmD, 8, 9, 10, 301, -107, 316, -92, 507, 923};        // Allefe
-Pata DirT = {&pwmD, 12, 13, 14, 331, -91, 286, -126, 480, 895};      // Jobs e Rafas
+Pata DirT = {&pwmD, 12, 13, 14, 313, -89, 286, -126, 480, 895};      // Jobs e Rafas
 
 Hexapod scarlet = {EsqF, EsqM, EsqT, DirF, DirM, DirT};
 
