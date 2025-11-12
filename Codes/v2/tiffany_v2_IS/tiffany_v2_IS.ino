@@ -967,29 +967,33 @@ void callback(char* topic, byte* payload, unsigned int length) {
       Serial.print("Ângulo: ");
       Serial.println(angle_joystick);
 
-      if (vel_joystick > 2) {
-        mode = 0;
-        estado = 3;
+      if (estado != 11){
+        if (vel_joystick > 2) {
+          mode = 0;
+          estado = 3;
+        }
+        else if ((vel_joystick == 2)&&(angle_joystick == 180)) {
+          mode = 1;
+          estado = 3;
+        }
+        else if ((vel_joystick == 2)&&(angle_joystick == 0)) {
+          mode = 1;
+          estado = 3;
+        }
+        else if ((vel_joystick == -10) && (angle_joystick == 180)) {
+          mode = 0;
+          estado = 10;
+        }
+        else{
+          mode = 0;
+          estado = 0;
+        }
       }
-      else if ((vel_joystick == 2)&&(angle_joystick == 180)) {
-        mode = 1;
-        estado = 3;
-      }
-      else if ((vel_joystick == 2)&&(angle_joystick == 0)) {
-        mode = 1;
-        estado = 3;
-      }
-      else if ((vel_joystick == -10) && (angle_joystick == 0)) {
-        mode = 0;
-        estado = 9;
-      }
-      else if ((vel_joystick == -10) && (angle_joystick == 180)) {
-        mode = 0;
-        estado = 10;
-      }
-      else if (estado != 11){
-        mode = 0;
-        estado = 0;
+      else{
+        if ((vel_joystick == -10) && (angle_joystick == 0)) {
+          mode = 0;
+          estado = 9;
+        }
       }
     }
   }
