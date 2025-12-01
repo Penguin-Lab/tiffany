@@ -782,7 +782,7 @@ struct Hexapod {
 
 // Criacao das patas e do hexapod
 Pata EsqF = {&pwmE, 12, 13, 14, 343, 758, 336, 750, 151, -259};     // Messi
-Pata EsqM = {&pwmE, 4, 5, 6, 312, 727, 312, 722, 174, -239};        // Junior e Ricardo
+Pata EsqM = {&pwmE, 4, 5, 6, 312, 727, 296, 710, 174, -239};        // Junior e Ricardo
 Pata EsqT = {&pwmE, 0, 1, 2, 316, 730, 325, 731, 141, -278};        // Zioto e Jones
 
 Pata DirF = {&pwmD, 0, 1, 2, 326, -80, 301, -103, 486, 887};         // Gustavo e Duda
