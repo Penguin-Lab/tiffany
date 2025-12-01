@@ -781,13 +781,13 @@ struct Hexapod {
 };
 
 // Criacao das patas e do hexapod
-Pata EsqF = {&pwmE, 12, 13, 14, 343, 758, 336, 750, 147, -263};     // Messi
-Pata EsqM = {&pwmE, 4, 5, 6, 312, 727, 312, 722, 170, -243};        // Junior e Ricardo
-Pata EsqT = {&pwmE, 0, 1, 2, 316, 730, 325, 731, 136, -283};        // Zioto e Jones
+Pata EsqF = {&pwmE, 12, 13, 14, 343, 758, 336, 750, 151, -259};     // Messi
+Pata EsqM = {&pwmE, 4, 5, 6, 312, 727, 312, 722, 174, -239};        // Junior e Ricardo
+Pata EsqT = {&pwmE, 0, 1, 2, 316, 730, 325, 731, 141, -278};        // Zioto e Jones
 
-Pata DirF = {&pwmD, 0, 1, 2, 326, -80, 301, -103, 490, 891};         // Gustavo e Duda
-Pata DirM = {&pwmD, 8, 9, 10, 301, -107, 316, -92, 507, 923};        // Allefe
-Pata DirT = {&pwmD, 12, 13, 14, 313, -89, 286, -126, 480, 895};      // Jobs e Rafas
+Pata DirF = {&pwmD, 0, 1, 2, 326, -80, 301, -103, 486, 887};         // Gustavo e Duda
+Pata DirM = {&pwmD, 8, 9, 10, 301, -107, 316, -92, 503, 919};        // Allefe
+Pata DirT = {&pwmD, 12, 13, 14, 313, -89, 286, -126, 479, 891};      // Jobs e Rafas
 
 Hexapod scarlet = {EsqF, EsqM, EsqT, DirF, DirM, DirT};
 
