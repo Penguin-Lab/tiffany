@@ -119,10 +119,10 @@ int joystickToInt(int joystickAngle, int deltaAngle){
   if (abs(angle - 180) <= deltaAngle || abs(angle + 180) <= deltaAngle){
     return 180;
   }
-  else if (abs(angle - 90) <= deltaAngle){
+  else if (abs(angle - 90) <= deltaAngle*4){
     return 90;
   }
-  else if (abs(angle + 90) <= deltaAngle){
+  else if (abs(angle + 90) <= deltaAngle*4){
     return -90;
   }
   else if (abs(angle) <= deltaAngle){
@@ -705,6 +705,11 @@ struct Hexapod {
       if (angle_abs > 90) angle_max = -angle_max;
       else angle_max = -angle_max;
     }
+    if (v_mult == 1.0 && w_mult == 1.0){  // andando e girando
+      float percentual = angle_abs/180.0;
+      w_mult = percentual;
+      v_mult = 1.0 - percentual;
+    }
     floatxyz signalsDir = {-1.0,-1.0,1.0};
     floatxyz signalsEsq = {-1.0,1.0,1.0};
     // Aplicar a translacao do ombro corrigido pro centro do corpo
@@ -852,7 +857,7 @@ void TaskHexapod(void *pvParameters) {
         vTaskDelay(pdMS_TO_TICKS(20));
     }
     else if(estado == 3){ // Andar omnidirecional ou rotacional
-        float angle = joystickToInt(angle_joystick,20);
+        float angle = joystickToInt(angle_joystick,5);
         if (mode == 0){
           float angle_rad = angle*M_PI/180.0;
           k = scarlet.andar(k,angle_rad);
