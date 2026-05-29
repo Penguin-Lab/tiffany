@@ -8,7 +8,7 @@
 #define TOTAL_PONTOS 25
 #define METADE_PONTOS TOTAL_PONTOS / 2
 #define TOTAL_PONTOS_CIRCULAR 25
-#define DEBUG_SIMULADOR false
+#define DEBUG_SIMULADOR true
 
 int OFFSET_ESQF = 0;
 int OFFSET_DIRT = METADE_PONTOS;
@@ -270,9 +270,9 @@ struct Pata {
   floatxyz cinematicaDireta(int3 angles){
     float3 angles_rad = degreeToRad(angles);
     floatxyz xyz;
-																																																																																																  
+                                                                                                                                                                                                  
     xyz.x = -sin(angles_rad.ombro)*(this->L1 + this->L3*cos(angles_rad.femur + angles_rad.tibia) + this->L2*cos(angles_rad.femur));
-																																																																										 
+                                                                                                                                                     
     xyz.y = cos(angles_rad.ombro)*(this->L1 + this->L3*cos(angles_rad.femur + angles_rad.tibia) +this->L2*cos(angles_rad.femur));
     xyz.z = this->L3*sin(angles_rad.femur + angles_rad.tibia) + this->L2*sin(angles_rad.femur);
     return xyz;
@@ -422,7 +422,7 @@ struct Pata {
 struct Hexapod {
   Pata &EsqF, &EsqM, &EsqT, &DirF, &DirM, &DirT;
   floatxyz OmbDirF, OmbDirM, OmbDirT, OmbEsqF, OmbEsqM, OmbEsqT; 
-  int3 poseAngles;
+  float3 poseAngles;
 
   Hexapod(Pata &EsqF, Pata &EsqM, Pata &EsqT, Pata &DirF, Pata &DirM, Pata &DirT):
     EsqF(EsqF), EsqM(EsqM), EsqT(EsqT), DirF(DirF), DirM(DirM), DirT(DirT) {
@@ -432,7 +432,7 @@ struct Hexapod {
       OmbEsqF = {9.30,5.55,0.0};
       OmbEsqM = {0.0,6.50,0.0};
       OmbEsqT = {-9.5,5.50,0.0};
-      poseAngles = {0,0,0};
+      poseAngles = {0.0,0.0,0.0};
   }
   
   void ligarHexapod(){
@@ -520,7 +520,7 @@ struct Hexapod {
       this->DirT.moverPata(anglesDirT.ombro, anglesDirT.femur, anglesDirT.tibia);
       #if DEBUG_SIMULADOR
         this->enviarAngulos(k);
-      #endif					 
+      #endif           
       k++;
       delay(20);
     }
@@ -545,8 +545,8 @@ struct Hexapod {
     // Move as patas para (x_ini,y_ini,zStart)
     int k = 0;
     #if DEBUG_SIMULADOR
-		  this->enviarAngulos(k);
-	  #endif
+      this->enviarAngulos(k);
+    #endif
     while (k < metadePontos){
       floatxyz xyzEsqF = this->EsqF.trajetoriaPataBezier(EsqF.xyz_ini, k, 0, 0, 0, xyzStartEsqF.z - EsqF.xyz_ini.z, totalPontos);
       floatxyz xyzDirM = this->DirM.trajetoriaPataBezier(DirM.xyz_ini, k, 0, 0, 0, xyzStartDirM.z - DirM.xyz_ini.z, totalPontos);
@@ -568,7 +568,7 @@ struct Hexapod {
       this->DirT.moverPata(anglesDirT.ombro, anglesDirT.femur, anglesDirT.tibia);
       #if DEBUG_SIMULADOR
         this->enviarAngulos(k);
-      #endif	 
+      #endif   
       k++;
       delay(20);
     }
@@ -584,7 +584,7 @@ struct Hexapod {
     k = 0;
     #if DEBUG_SIMULADOR
       this->enviarAngulos(k);
-    #endif		   
+    #endif       
     while (k < metadePontos){
       floatxyz xyzEsqF = this->EsqF.trajetoriaPataBezier(xyzCoccumEsqF, k, 0, xyzStartEsqF.x - EsqF.xyz_ini.x, xyzStartEsqF.y - EsqF.xyz_ini.y, 0, totalPontos);
       floatxyz xyzDirM = this->DirM.trajetoriaPataBezier(xyzCoccumDirM, k, 0, xyzStartDirM.x - DirM.xyz_ini.x, xyzStartDirM.y - DirM.xyz_ini.y, 0, totalPontos);
@@ -606,7 +606,7 @@ struct Hexapod {
       this->DirT.moverPata(anglesDirT.ombro, anglesDirT.femur, anglesDirT.tibia);
       #if DEBUG_SIMULADOR
         this->enviarAngulos(k);
-      #endif				 
+      #endif         
       k++;
       delay(20);
     }
@@ -758,7 +758,7 @@ struct Hexapod {
     floatxyz xyzDirF = this->DirF.trajetoriaLinear(this->DirF.xyz_ini, k, OFFSET_DIRF, 0);
     floatxyz xyzEsqM = this->EsqM.trajetoriaLinear(this->EsqM.xyz_ini, k, OFFSET_ESQM, 0);
     floatxyz xyzDirT = this->DirT.trajetoriaLinear(this->DirT.xyz_ini, k, OFFSET_DIRT, 0);
-	  float v_mult = 1.0;
+    float v_mult = 1.0;
     float w_mult = 1.0;
     if ((angle_abs == 180)||(angle_abs == 0)){  // indo para frente ou para tras
       w_mult = 0.0;
@@ -795,8 +795,8 @@ struct Hexapod {
     xyzEsqT = (xyzEsqT*(v_mult) + xyzEsqTRot*(w_mult))/(v_mult+w_mult);
     xyzDirF = (xyzDirF*(v_mult) + xyzDirFRot*(w_mult))/(v_mult+w_mult);
     xyzEsqM = (xyzEsqM*(v_mult) + xyzEsqMRot*(w_mult))/(v_mult+w_mult);
-    xyzDirT = (xyzDirT*(v_mult) + xyzDirTRot*(w_mult))/(v_mult+w_mult);			   
-	  int3 anglesEsqF = this->EsqF.cinematicaInversa(xyzEsqF);
+    xyzDirT = (xyzDirT*(v_mult) + xyzDirTRot*(w_mult))/(v_mult+w_mult);        
+    int3 anglesEsqF = this->EsqF.cinematicaInversa(xyzEsqF);
     int3 anglesDirM = this->DirM.cinematicaInversa(xyzDirM);
     int3 anglesEsqT = this->EsqT.cinematicaInversa(xyzEsqT);
     int3 anglesDirF = this->DirF.cinematicaInversa(xyzDirF);
@@ -935,15 +935,20 @@ struct Hexapod {
     }
   }
 
-  int3 reagindoFake(int3 angles_env, float Kp){
-    int3 error = int3{0,0,0} - angles_env;
+  float3 reagindoFake(float3 angles, float Kp){
+    float3 error = float3{0,0,0} - angles;
     float3 pid = {0.0,0.0,0.0};
     // if (error != int3{0,0,0}){ // FAZER UM FILTROZINHO
     if(abs(error.ombro) > 2 || abs(error.femur) > 2 || abs(error.tibia) > 2){
-      pid = float3(error)*Kp;
-      this->poseAngles = this->poseAngles + int3(pid);
+      pid = error*Kp;
+      this->poseAngles = this->poseAngles - pid;
     }
-    return angles_env - int3(pid); // O fake aqui
+//    Serial.print(error.ombro); Serial.print(","); Serial.print(error.femur); Serial.print(","); Serial.print(error.tibia); Serial.println(",");
+//    Serial.print(pid.ombro); Serial.print(","); Serial.print(pid.femur); Serial.print(","); Serial.print(pid.tibia); Serial.println(",");
+//    Serial.print(this->poseAngles.ombro); Serial.print(","); Serial.print(this->poseAngles.femur); Serial.print(","); Serial.print(this->poseAngles.tibia); Serial.println(",");
+    float3 coisa = angles + pid;
+//    Serial.print(coisa.ombro); Serial.print(","); Serial.print(coisa.femur); Serial.print(","); Serial.print(coisa.tibia); Serial.println("!");
+    return coisa; // O fake aqui
   }
 
   void enviarAngulos(int k){
@@ -1032,8 +1037,8 @@ void TaskHexapod(void *pvParameters) {
         // scarlet.darPatinha(k,totalPontos);
         scarlet.darPatinhaAlto(k,angles,totalPontos);
         #if DEBUG_SIMULADOR
-			    scarlet.enviarAngulos(k);
-		    #endif
+          scarlet.enviarAngulos(k);
+        #endif
         if (k < (totalPontos/2)){
           k++;
         }
@@ -1045,7 +1050,7 @@ void TaskHexapod(void *pvParameters) {
         scarlet.cinematicaInversaCorpo(angles);
         #if DEBUG_SIMULADOR
           scarlet.enviarAngulos(k);
-        #endif				 
+        #endif         
         if (k == TOTAL_PONTOS_CIRCULAR - 1){
           k = 0;
         }
@@ -1066,11 +1071,12 @@ void TaskHexapod(void *pvParameters) {
       else{
         // int3 angles = {roll,pitch,yaw};
         // angles_env = scarlet.reagindoFake(angles_env, 0.025);
-        k = scarlet.andarCircularReacao(k,angle,scarlet.poseAngles);
+        int3 anglesint3 = int3(scarlet.poseAngles);
+        k = scarlet.andarCircularReacao(k,angle,anglesint3);
       }
       #if DEBUG_SIMULADOR
         scarlet.enviarAngulos(k);
-      #endif				 
+      #endif         
       vTaskDelay(pdMS_TO_TICKS(20));
     }
     else if(estado == 9){ // Arma
@@ -1086,14 +1092,15 @@ void TaskHexapod(void *pvParameters) {
     else if(estado == 0){
       k = 0;
       if (mode == 2){
-        scarlet.parar(scarlet.poseAngles);
+        int3 anglesint3 = int3(scarlet.poseAngles);
+        scarlet.parar(anglesint3);
       }
       else{
         scarlet.parar();
       }
       #if DEBUG_SIMULADOR
         scarlet.enviarAngulos(k);
-      #endif	   
+      #endif     
       vTaskDelay(pdMS_TO_TICKS(15));
     }
     else{
@@ -1106,7 +1113,7 @@ void TaskComunicacao(void *pvParameters) {
   for (;;) {
     Dabble.processInput();
     if (estado != 11){
-      if (GamePad.isRightPressed()||GamePad.isLeftPressed()){       // Modo rotacional
+      if (GamePad.isRightPressed()||GamePad.isLeftPressed()||GamePad.isCrossPressed()){       // Modo rotacional
         mode = 1;
       }
       if (GamePad.isUpPressed()||GamePad.isDownPressed()){       // Modo omnidirecional
@@ -1142,16 +1149,17 @@ void TaskComunicacao(void *pvParameters) {
 }
 
 void TaskReacao(void *pvParameters) {
-  int3 angles_env = {10,0,0};
+  float3 angles_env = {0.0,10.0,0.0};
   for (;;) {
     if (mode == 0 || mode == 1){
-        scarlet.poseAngles = {0,0,0};
-        angles_env = {10,0,0};
+        scarlet.poseAngles = {0.0,0.0,0.0};
+        angles_env = {0.0,10.0,0.0};
       }
     else{
         // int3 angles = {roll,pitch,yaw};
-        angles_env = scarlet.reagindoFake(angles_env, 0.025);
+//        angles_env = scarlet.reagindoFake(angles_env, 0.025);
+        scarlet.poseAngles = {0.0,10.0,0.0};
       }
-      vTaskDelay(pdMS_TO_TICKS(200));
+      vTaskDelay(pdMS_TO_TICKS(20));
   }
 }
