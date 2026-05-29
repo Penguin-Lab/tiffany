@@ -20,16 +20,15 @@ int OFFSET_DIRM = 0;
 Adafruit_PWMServoDriver pwmE = Adafruit_PWMServoDriver(0x40);
 Adafruit_PWMServoDriver pwmD = Adafruit_PWMServoDriver(0x41);
 
+struct int3;
+struct float3;
+
 struct int3 {
     int ombro, femur, tibia;
+    
     int3() = default;
-
-    // Converte float3 -> int3
-    int3(const float3& i) {
-        ombro = (int)i.ombro;
-        femur = (int)i.femur;
-        tibia = (int)i.tibia;
-    }
+    int3(const float3& values);
+    int3(int o, int f, int t): ombro(o), femur(f), tibia(t) {}
 
     // Soma
     int3 operator+(const int3& rhs) const {
@@ -65,14 +64,10 @@ struct int3 {
 
 struct float3 {
     float ombro, femur, tibia;
+    
     float3() = default;
-
-    // Converte int3 -> float3
-    float3(const int3& i) {
-        ombro = i.ombro;
-        femur = i.femur;
-        tibia = i.tibia;
-    }
+    float3(const int3& values);
+    float3(float o, float f, float t): ombro(o), femur(f), tibia(t) {}
 
     // Soma
     float3 operator+(const float3& rhs) const {
@@ -105,6 +100,20 @@ struct float3 {
         return !(*this == rhs);
     }
 };
+
+// Converte float3 -> int3
+int3::int3(const float3& values) {
+    ombro = (int)values.ombro;
+    femur = (int)values.femur;
+    tibia = (int)values.tibia;
+}
+
+// Converte int3 -> float3
+float3::float3(const int3& values) {
+    ombro = (float)values.ombro;
+    femur = (float)values.femur;
+    tibia = (float)values.tibia;
+}
 
 int3 radToDegree(float3 angles_rad){
     return {int(angles_rad.ombro * 180.0 / M_PI),int(angles_rad.femur * 180.0 / M_PI),int(angles_rad.tibia * 180.0 / M_PI)};
@@ -375,10 +384,38 @@ struct Pata {
     this->atualizaBezier(-8.0);
   }
 
+  floatxyz rotacaoPata(floatxyz ponto, int3 angles){
+    floatxyz rotPonto;
+    float3 angles_rad = degreeToRad(angles);
+    float roll = angles_rad.ombro;
+    float pitch = angles_rad.femur;
+    float yaw = angles_rad.tibia;
+    rotPonto.x = ponto.x*cos(pitch)*cos(yaw) + ponto.y*(cos(yaw)*sin(pitch)*sin(roll) - cos(roll)*sin(yaw)) + ponto.z*(sin(roll)*sin(yaw) + cos(roll)*cos(yaw)*sin(pitch));
+    rotPonto.y = ponto.x*cos(pitch)*sin(yaw) + ponto.y*(cos(roll)*cos(yaw) + sin(pitch)*sin(roll)*sin(yaw)) + ponto.z*(cos(roll)*sin(pitch)*sin(yaw) - cos(yaw)*sin(roll));
+    rotPonto.z = -ponto.x*sin(pitch) + ponto.y*cos(pitch)*sin(roll) + ponto.z*cos(pitch)*cos(roll);
+    return rotPonto;
+  }
+
   void moverPosIni() {
     int3 angles = cinematicaInversa(this->xyz_ini);
     // this->moverPata(angles.ombro, angles.femur, angles.tibia);
     this->moverPataSuave(angles.ombro, angles.femur, angles.tibia, 1);
+  }
+
+  void moverPosIni(floatxyz Ombro, floatxyz signals, int3 angles) {
+    // Reacao a inclinacao
+    int3 anglesRot = angles*(-1);
+    // Aplicar a translacao do ombro corrigido pro centro do corpo
+    floatxyz ponto = this->xyz_ini*signals + Ombro;
+    // Aplicar a rotacao da pata
+    floatxyz xyzrot = this->rotacaoPata(ponto,anglesRot);
+    // Aplicar a translacao de volta para o ombro e descorrige
+    floatxyz xyzReact = (xyzrot - Ombro)*signals;
+    
+    // De pontos para angulos e movimento
+    int3 anglesPata = this->cinematicaInversa(xyzReact);
+    // this->moverPata(anglesPata.ombro, anglesPata.femur, anglesPata.tibia);
+    this->moverPataSuave(anglesPata.ombro, anglesPata.femur, anglesPata.tibia, 1);
   }
 };
 
@@ -573,18 +610,6 @@ struct Hexapod {
       k++;
       delay(20);
     }
-  }
-
-  floatxyz rotacaoPata(floatxyz ponto, int3 angles){
-    floatxyz rotPonto;
-    float3 angles_rad = degreeToRad(angles);
-    float roll = angles_rad.ombro;
-    float pitch = angles_rad.femur;
-    float yaw = angles_rad.tibia;
-    rotPonto.x = ponto.x*cos(pitch)*cos(yaw) + ponto.y*(cos(yaw)*sin(pitch)*sin(roll) - cos(roll)*sin(yaw)) + ponto.z*(sin(roll)*sin(yaw) + cos(roll)*cos(yaw)*sin(pitch));
-    rotPonto.y = ponto.x*cos(pitch)*sin(yaw) + ponto.y*(cos(roll)*cos(yaw) + sin(pitch)*sin(roll)*sin(yaw)) + ponto.z*(cos(roll)*sin(pitch)*sin(yaw) - cos(yaw)*sin(roll));
-    rotPonto.z = -ponto.x*sin(pitch) + ponto.y*cos(pitch)*sin(roll) + ponto.z*cos(pitch)*cos(roll);
-    return rotPonto;
   } 
 
   void cinematicaInversaCorpo(int3 angles){
@@ -600,12 +625,12 @@ struct Hexapod {
     floatxyz pontoEsqM = this->EsqM.xyz_ini*signalsEsq + OmbEsqM;
     floatxyz pontoDirT = this->DirT.xyz_ini*signalsDir + OmbDirT;
     // Aplicar a rotacao da pata
-    floatxyz xyzEsqFrot = rotacaoPata(pontoEsqF,anglesRot);
-    floatxyz xyzDirMrot = rotacaoPata(pontoDirM,anglesRot);
-    floatxyz xyzEsqTrot = rotacaoPata(pontoEsqT,anglesRot);
-    floatxyz xyzDirFrot = rotacaoPata(pontoDirF,anglesRot);
-    floatxyz xyzEsqMrot = rotacaoPata(pontoEsqM,anglesRot);
-    floatxyz xyzDirTrot = rotacaoPata(pontoDirT,anglesRot);
+    floatxyz xyzEsqFrot = this->EsqF.rotacaoPata(pontoEsqF,anglesRot);
+    floatxyz xyzDirMrot = this->DirM.rotacaoPata(pontoDirM,anglesRot);
+    floatxyz xyzEsqTrot = this->EsqT.rotacaoPata(pontoEsqT,anglesRot);
+    floatxyz xyzDirFrot = this->DirF.rotacaoPata(pontoDirF,anglesRot);
+    floatxyz xyzEsqMrot = this->EsqM.rotacaoPata(pontoEsqM,anglesRot);
+    floatxyz xyzDirTrot = this->DirT.rotacaoPata(pontoDirT,anglesRot);
     // Aplicar a translacao de volta para o ombro e descorrige
     floatxyz xyzEsqF = (xyzEsqFrot - OmbEsqF)*signalsEsq;
     floatxyz xyzDirM = (xyzDirMrot - OmbDirM)*signalsDir;
@@ -668,11 +693,11 @@ struct Hexapod {
     floatxyz pontoEsqM = this->EsqM.xyz_ini*signalsEsq + OmbEsqM;
     floatxyz pontoDirT = this->DirT.xyz_ini*signalsDir + OmbDirT;
     // Aplicar a rotacao da pata
-    floatxyz xyzEsqFrot = rotacaoPata(pontoEsqF,anglesRot);
-    floatxyz xyzDirMrot = rotacaoPata(pontoDirM,anglesRot);
-    floatxyz xyzEsqTrot = rotacaoPata(pontoEsqT,anglesRot);
-    floatxyz xyzEsqMrot = rotacaoPata(pontoEsqM,anglesRot);
-    floatxyz xyzDirTrot = rotacaoPata(pontoDirT,anglesRot);
+    floatxyz xyzEsqFrot = this->EsqF.rotacaoPata(pontoEsqF,anglesRot);
+    floatxyz xyzDirMrot = this->DirM.rotacaoPata(pontoDirM,anglesRot);
+    floatxyz xyzEsqTrot = this->EsqT.rotacaoPata(pontoEsqT,anglesRot);
+    floatxyz xyzEsqMrot = this->EsqM.rotacaoPata(pontoEsqM,anglesRot);
+    floatxyz xyzDirTrot = this->DirT.rotacaoPata(pontoDirT,anglesRot);
     // Aplicar a translacao de volta para o ombro e descorrige
     floatxyz xyzEsqF = (xyzEsqFrot - OmbEsqF)*signalsEsq;
     floatxyz xyzDirM = (xyzDirMrot - OmbDirM)*signalsDir;
@@ -802,7 +827,7 @@ struct Hexapod {
     }
   }
 
-  void andarCircularReacao(int k, float angle, int3 angles){
+  int andarCircularReacao(int k, float angle, int3 angles){
     // Trajetoria linear
     float angle_abs = abs(angle);
     float angle_max = M_PI/9.0;
@@ -864,12 +889,12 @@ struct Hexapod {
     floatxyz pontoEsqM = xyzEsqM*signalsEsq + OmbEsqM;
     floatxyz pontoDirT = xyzDirT*signalsDir + OmbDirT;
     // Aplicar a rotacao da pata
-    floatxyz xyzEsqFrot = rotacaoPata(pontoEsqF,anglesRot);
-    floatxyz xyzDirMrot = rotacaoPata(pontoDirM,anglesRot);
-    floatxyz xyzEsqTrot = rotacaoPata(pontoEsqT,anglesRot);
-    floatxyz xyzDirFrot = rotacaoPata(pontoDirF,anglesRot);
-    floatxyz xyzEsqMrot = rotacaoPata(pontoEsqM,anglesRot);
-    floatxyz xyzDirTrot = rotacaoPata(pontoDirT,anglesRot);
+    floatxyz xyzEsqFrot = this->EsqF.rotacaoPata(pontoEsqF,anglesRot);
+    floatxyz xyzDirMrot = this->DirM.rotacaoPata(pontoDirM,anglesRot);
+    floatxyz xyzEsqTrot = this->EsqT.rotacaoPata(pontoEsqT,anglesRot);
+    floatxyz xyzDirFrot = this->DirF.rotacaoPata(pontoDirF,anglesRot);
+    floatxyz xyzEsqMrot = this->EsqM.rotacaoPata(pontoEsqM,anglesRot);
+    floatxyz xyzDirTrot = this->DirT.rotacaoPata(pontoDirT,anglesRot);
     // Aplicar a translacao de volta para o ombro e descorrige
     floatxyz xyzEsqFReact = (xyzEsqFrot - OmbEsqF)*signalsEsq;
     floatxyz xyzDirMReact = (xyzDirMrot - OmbDirM)*signalsDir;
@@ -912,13 +937,11 @@ struct Hexapod {
 
   int3 reagindoFake(int3 angles_env, float Kp){
     int3 error = int3{0,0,0} - angles_env;
+    float3 pid = {0.0,0.0,0.0};
     // if (error != int3{0,0,0}){ // FAZER UM FILTROZINHO
     if(abs(error.ombro) > 2 || abs(error.femur) > 2 || abs(error.tibia) > 2){
-      float3 pid = float3(error)*Kp;
+      pid = float3(error)*Kp;
       this->poseAngles = this->poseAngles + int3(pid);
-    }
-    else{
-      float3 pid = {0.0,0.0,0.0};
     }
     return angles_env - int3(pid); // O fake aqui
   }
@@ -944,6 +967,18 @@ struct Hexapod {
     this->EsqM.moverPosIni();
     this->DirT.moverPosIni();
   }
+
+  void parar(int3 angles){
+    floatxyz signalsDir = {-1.0,-1.0,1.0};
+    floatxyz signalsEsq = {-1.0,1.0,1.0};
+    this->EsqF.moverPosIni(OmbEsqF,signalsEsq,angles);
+    this->DirM.moverPosIni(OmbDirM,signalsDir,angles);
+    this->EsqT.moverPosIni(OmbEsqT,signalsEsq,angles);
+    this->DirF.moverPosIni(OmbDirF,signalsDir,angles);
+    this->EsqM.moverPosIni(OmbEsqM,signalsEsq,angles);
+    this->DirT.moverPosIni(OmbDirT,signalsDir,angles);
+  }
+
 };
 
 // Criacao das patas e do hexapod
@@ -959,6 +994,7 @@ Hexapod scarlet = {EsqF, EsqM, EsqT, DirF, DirM, DirT};
 
 void TaskHexapod(void *pvParameters);
 void TaskComunicacao(void *pvParameters);
+void TaskReacao(void *pvParameters);
 
 void setup() {
   Serial.begin(38400);
@@ -975,6 +1011,7 @@ void setup() {
 
   xTaskCreate(TaskHexapod, "hexapod", 4096, NULL, 1, NULL);
   xTaskCreate(TaskComunicacao, "comunicacao", 4096, NULL, 1, NULL);
+  xTaskCreate(TaskReacao, "reacao", 4096, NULL, 1, NULL);
 
 }
 
@@ -988,7 +1025,6 @@ int mode = 0; // 0 - Omnidirecional, 1 - Rotacional
 void TaskHexapod(void *pvParameters) {
   int k = 0;
   int totalPontos = TOTAL_PONTOS;
-  int3 angles_env = {10,0,0};
   for (;;) {
     if(estado == 1){ // "Dar a patinha": move patinha para a posição X = [x_ini+10;y_ini;z_ini+10]
         totalPontos = 50;
@@ -1029,7 +1065,7 @@ void TaskHexapod(void *pvParameters) {
       }
       else{
         // int3 angles = {roll,pitch,yaw};
-        angles_env = scarlet.reagindoFake(angles_env, 0.025);
+        // angles_env = scarlet.reagindoFake(angles_env, 0.025);
         k = scarlet.andarCircularReacao(k,angle,scarlet.poseAngles);
       }
       #if DEBUG_SIMULADOR
@@ -1049,7 +1085,12 @@ void TaskHexapod(void *pvParameters) {
     }
     else if(estado == 0){
       k = 0;
-      scarlet.parar();
+      if (mode == 2){
+        scarlet.parar(scarlet.poseAngles);
+      }
+      else{
+        scarlet.parar();
+      }
       #if DEBUG_SIMULADOR
         scarlet.enviarAngulos(k);
       #endif	   
@@ -1097,5 +1138,20 @@ void TaskComunicacao(void *pvParameters) {
       }
     }
     vTaskDelay(pdMS_TO_TICKS(20));   
+  }
+}
+
+void TaskReacao(void *pvParameters) {
+  int3 angles_env = {10,0,0};
+  for (;;) {
+    if (mode == 0 || mode == 1){
+        scarlet.poseAngles = {0,0,0};
+        angles_env = {10,0,0};
+      }
+    else{
+        // int3 angles = {roll,pitch,yaw};
+        angles_env = scarlet.reagindoFake(angles_env, 0.025);
+      }
+      vTaskDelay(pdMS_TO_TICKS(200));
   }
 }
