@@ -4,11 +4,19 @@
 #include <Wire.h>
 #include <Adafruit_PWMServoDriver.h>
 #include <math.h>
+#include "SparkFun_BNO08x_Arduino_Library.h"
+ 
+// --------- I2C addresses ----------
+#define BNO_ADDR  0x4B
+ 
+// --------- IMU ----------
+BNO08x myIMU;
 
 #define TOTAL_PONTOS 25
 #define METADE_PONTOS TOTAL_PONTOS / 2
 #define TOTAL_PONTOS_CIRCULAR 25
-#define DEBUG_SIMULADOR true
+#define DEBUG_SIMULADOR false
+#define MAX_ANGLE 15.0
 
 int OFFSET_ESQF = 0;
 int OFFSET_DIRT = METADE_PONTOS;
@@ -1000,7 +1008,7 @@ Hexapod scarlet = {EsqF, EsqM, EsqT, DirF, DirM, DirT};
 void TaskHexapod(void *pvParameters);
 void TaskComunicacao(void *pvParameters);
 void TaskReacao(void *pvParameters);
-
+ 
 void setup() {
   Serial.begin(38400);
   Dabble.begin("Tiffany");
@@ -1011,6 +1019,16 @@ void setup() {
   
   pwmD.begin();
   pwmD.setPWMFreq(50);
+
+  // Start BNO080 at 0x4B
+  if (!myIMU.begin(BNO_ADDR, Wire)) {
+    Serial.println("BNO080 not found");
+    Serial.println("Check wiring");
+    while (1) delay(10);
+  }
+ 
+  // Enable Euler angles (via Rotation Vector)
+  myIMU.enableRotationVector(50); // 50ms (20Hz)
 
   delay(2000);
 
@@ -1149,16 +1167,31 @@ void TaskComunicacao(void *pvParameters) {
 }
 
 void TaskReacao(void *pvParameters) {
-  float3 angles_env = {0.0,10.0,0.0};
+  // float3 angles_env = {0.0,10.0,0.0};
   for (;;) {
     if (mode == 0 || mode == 1){
         scarlet.poseAngles = {0.0,0.0,0.0};
-        angles_env = {0.0,10.0,0.0};
+        // angles_env = {0.0,10.0,0.0};
       }
     else{
         // int3 angles = {roll,pitch,yaw};
 //        angles_env = scarlet.reagindoFake(angles_env, 0.025);
-        scarlet.poseAngles = {0.0,10.0,0.0};
+        // scarlet.poseAngles = {0.0,10.0,0.0};
+        if (myIMU.getSensorEvent() && myIMU.getSensorEventID() == SENSOR_REPORTID_ROTATION_VECTOR) {
+          float roll_deg  = roundf(myIMU.getRoll()  * 1800.0f / PI) / 10.0f;
+          roll_deg = 0.95*roll_deg + 0.05*scarlet.poseAngles.ombro;
+          if (roll_deg > MAX_ANGLE) roll_deg = MAX_ANGLE;
+          if (roll_deg < -MAX_ANGLE) roll_deg = -MAX_ANGLE;
+          float pitch_deg = roundf(myIMU.getPitch() * 1800.0f / PI) / 10.0f;
+          pitch_deg = 0.95*pitch_deg + 0.05*scarlet.poseAngles.femur;
+          if (pitch_deg > MAX_ANGLE) pitch_deg = MAX_ANGLE;
+          if (pitch_deg < -MAX_ANGLE) pitch_deg = -MAX_ANGLE;
+          scarlet.poseAngles = {roll_deg, pitch_deg, 0.0f};
+//          Serial.print("R: ");
+//          Serial.print(roll_deg);
+//          Serial.print(" P: ");
+//          Serial.println(pitch_deg);
+        }
       }
       vTaskDelay(pdMS_TO_TICKS(20));
   }
