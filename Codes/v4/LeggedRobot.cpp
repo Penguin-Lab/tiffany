@@ -20,7 +20,7 @@ floatxyz coordBodyToLeg(floatxyz bodyPosition, float installedAngle_rad, floatxy
     return xyz;
 }
 
-floatxyz 3dRotation(floatxyz point, int3 angles){
+floatxyz Rotation3d(floatxyz point, int3 angles){
     floatxyz rotPoint;
     float3 angles_rad = degreeToRad(angles);
     float roll = angles_rad.coxa;
@@ -308,7 +308,7 @@ int LeggedRobot::reactCircularWalk(int k, float angle, int3 angles){
         // Translation of foot position to body coordinates
         floatxyz xyzBody = coordLegToBody(xyz[i], config[i].installedAngle_rad, config[i].coxa);
         // Apply rotation for reaction
-        floatxyz xyzBodyRot = 3dRotation(xyzBody,anglesRot);
+        floatxyz xyzBodyRot = Rotation3d(xyzBody,anglesRot);
         // Rotation and translation from body back to leg coordinates
         floatxyz xyzLeg = coordBodyToLeg(xyzBodyRot, config[i].installedAngle_rad, config[i].coxa);
         anglesReact[i] = robotlegs[i]->inverseKinematics(xyzLeg);
@@ -342,7 +342,7 @@ void LeggedRobot::bodyTilt(int3 angles){
         // Translation of foot position to body coordinates
         floatxyz xyzBody = coordLegToBody(robotlegs[i]->footPosition, config[i].installedAngle_rad, config[i].coxa);
         // Apply rotation for reaction
-        floatxyz xyzBodyRot = 3dRotation(xyzBody,anglesRot);
+        floatxyz xyzBodyRot = Rotation3d(xyzBody,anglesRot);
         // Rotation and translation from body back to leg coordinates
         floatxyz xyzLeg = coordBodyToLeg(xyzBodyRot, config[i].installedAngle_rad, config[i].coxa);
         anglesReact[i] = robotlegs[i]->inverseKinematics(xyzLeg);
@@ -403,7 +403,7 @@ void LeggedRobot::highHandShake(int k, int legIdx, int3 angles, int totalPoints)
         // Translation of foot position to body coordinates
         floatxyz xyzBody = coordLegToBody(robotlegs[i]->footPosition, config[i].installedAngle_rad, config[i].coxa);
         // Apply rotation for reaction
-        floatxyz xyzBodyRot = 3dRotation(xyzBody,anglesRot);
+        floatxyz xyzBodyRot = Rotation3d(xyzBody,anglesRot);
         // Rotation and translation from body back to leg coordinates
         floatxyz xyzLeg = coordBodyToLeg(xyzBodyRot, config[i].installedAngle_rad, config[i].coxa);
         anglesReact[i] = robotlegs[i]->inverseKinematics(xyzLeg);
@@ -443,7 +443,7 @@ void LeggedRobot::idle(int3 angles){ // Same as bodyTilt but moving softly
         // Translation of foot position to body coordinates
         floatxyz xyzBody = coordLegToBody(robotlegs[i]->footPosition, config[i].installedAngle_rad, config[i].coxa);
         // Apply rotation for reaction
-        floatxyz xyzBodyRot = 3dRotation(xyzBody,anglesRot);
+        floatxyz xyzBodyRot = Rotation3d(xyzBody,anglesRot);
         // Rotation and translation from body back to leg coordinates
         floatxyz xyzLeg = coordBodyToLeg(xyzBodyRot, config[i].installedAngle_rad, config[i].coxa);
         anglesReact[i] = robotlegs[i]->inverseKinematics(xyzLeg);

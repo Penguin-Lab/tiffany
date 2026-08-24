@@ -20,7 +20,7 @@ struct LegConfig {
 
 floatxyz coordLegToBody(floatxyz legPosition, float installedAngle_rad, floatxyz coxa);
 floatxyz coordBodyToLeg(floatxyz bodyPosition, float installedAngle_rad, floatxyz coxa);
-floatxyz 3dRotation(floatxyz point, int3 angles);
+floatxyz Rotation3d(floatxyz point, int3 angles);
 
 class LeggedRobot {
 

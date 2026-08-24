@@ -209,9 +209,9 @@ void RobotLeg::moveToInitialPosition() {
 }
 
 void RobotLeg::shutdown() {
-    pwm->setPin(pins.coxa, 0, 0, true);
-    pwm->setPin(pins.femur, 0, 0, true);
-    pwm->setPin(pins.tibia, 0, 0, true);
+    // pwm->setPin(pins.coxa, 0, 4096);
+    // pwm->setPin(pins.femur, 0, 4096);
+    // pwm->setPin(pins.tibia, 0, 4096);
 }
 
 // =====================================================
